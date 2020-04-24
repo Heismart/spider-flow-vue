@@ -57,7 +57,7 @@
         </el-button>
       </el-tooltip>
       <el-tooltip class="item" effect="light" content="删除（Delete）" placement="bottom" :open-delay="500" :enterable="false">
-        <el-button type="primary" size="mini" icon="el-icon-delete" circle />
+        <el-button type="primary" size="mini" icon="el-icon-delete" circle @click="handleDelSelectCells" />
       </el-tooltip>
       <el-tooltip class="item" effect="light" content="编辑 XML" placement="bottom" :open-delay="500" :enterable="false">
         <el-button type="primary" size="mini" circle>
@@ -278,6 +278,8 @@ export default {
       globalCookies: [],
       // 全局 Headers
       globalHeaders: [],
+      // 图表编辑器
+      editor: {},
       propertiesFormRules: {
         spiderName: [
           { required: true, message: '请输入爬虫名称', trigger: 'blur' }
@@ -359,7 +361,13 @@ export default {
       const editor = new SpiderEditor({
         element: this.$refs.editorContainer
       })
+      // 加载图形
       loadShapes(editor, this.$refs.toolbarContainer.$el)
+      this.editor = editor
+    },
+    // 处理删除图形
+    handleDelSelectCells() {
+      this.editor.deleteSelectCells()
     }
   }
 }
@@ -433,6 +441,15 @@ li.CodeMirror-hint-active {
 	padding: 2px 5px;
 	color: #000;
 }
+/* 图表鼠标拉框样式 */
+div.mxRubberband {
+	position: absolute;
+	overflow: hidden;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #0000FF;
+	background: #0077FF;
+}
 </style>
 
 <style scoped>
@@ -461,6 +478,10 @@ li.CodeMirror-hint-active {
   color: #333;
   text-align: center;
   line-height: 160px;
+  background-image: linear-gradient(90deg, rgba(153, 153, 153, 0.3) 1px, rgba(0, 0, 0, 0) 1px),linear-gradient(rgba(153, 153, 153, 0.3) 1px, rgba(0, 0, 0, 0) 1px);
+	background-size: 8px 8px;
+	overflow: auto;
+  padding: 0px;
 }
 
 .el-container:nth-child(5) .el-aside,
