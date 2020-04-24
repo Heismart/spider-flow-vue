@@ -192,6 +192,7 @@ SpiderEditor.prototype.addShape = function(shape, label, element, defaultAdd) {
     var parent = this.graph.getDefaultParent()
     var model = this.graph.getModel()
     model.beginUpdate()
+    var cell
     try {
       cell = this.graph.insertVertex(parent, null, label, 80, 80, 32, 32, shape)
       cell.data = new JsonProperty()

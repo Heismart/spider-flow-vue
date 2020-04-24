@@ -96,18 +96,7 @@
       </el-tooltip>
     </el-header>
     <el-container>
-      <el-aside width="80px">
-        <el-row>
-          <el-col>
-            <el-button type="primary" plain size="large" icon="el-icon-back" circle />
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col>
-            <el-button type="primary" plain size="large" icon="el-icon-back" circle />
-          </el-col>
-        </el-row>
-      </el-aside>
+      <el-aside ref="toolbarContainer" width="80px" class="toolbar-container"></el-aside>
       <el-main>
         <div ref="editorContainer" class="editor-container" />
       </el-main>
@@ -370,7 +359,7 @@ export default {
       const editor = new SpiderEditor({
         element: this.$refs.editorContainer
       })
-      loadShapes(editor, this.$refs.editorContainer)
+      loadShapes(editor, this.$refs.toolbarContainer.$el)
     }
   }
 }
