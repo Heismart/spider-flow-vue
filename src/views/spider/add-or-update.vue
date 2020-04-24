@@ -484,6 +484,11 @@ div.mxRubberband {
   padding: 0px;
 }
 
+.el-main .editor-container {
+  /* 50 navbar，42 header toolbar，200 footer */
+  min-height: calc(100vh - 50px - 42px - 200px);
+}
+
 .el-container:nth-child(5) .el-aside,
 .el-container:nth-child(6) .el-aside {
   line-height: 260px;
