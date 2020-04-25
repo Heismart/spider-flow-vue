@@ -19,7 +19,9 @@ var mxCodecRegistry = mxgraph.mxCodecRegistry
 export function JsonProperty(object) {
   this.object = object || {}
 }
-
+JsonProperty.prototype.setDefaultValue = function(key,value){
+  this.object[key] = this.object[key] || value;
+}
 JsonProperty.prototype.reset = function(object) {
   this.object = object
 }

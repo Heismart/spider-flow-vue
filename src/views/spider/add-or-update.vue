@@ -102,142 +102,8 @@
       </el-main>
     </el-container>
     <el-footer height="200px">
-      <div class="properties-container" :version="version" :cellid="cellid">
-        <el-tabs v-model="tabActiveName" type="card">
-          <el-tab-pane label="全局配置" name="globalProperties">
-            <el-form ref="propertiesForm" :model="propertiesForm" size="mini" :rules="propertiesFormRules" :inline="true">
-              <el-form-item label="爬虫名称：" prop="spiderName">
-                <el-input v-model="propertiesForm.spiderName" placeholder="请输入爬虫名称" />
-              </el-form-item>
-              <el-form-item label="提交策略：" prop="submitStrategy">
-                <el-select v-model="propertiesForm.submitStrategy" placeholder="请选择提交策略">
-                  <el-option label="随机" value="random" />
-                  <el-option label="顺序" value="linked" />
-                  <el-option label="子优先" value="child" />
-                  <el-option label="父优先" value="parent" />
-                </el-select>
-              </el-form-item>
-              <el-form-item label="最大线程数：" prop="threadCount">
-                <el-input v-model="propertiesForm.threadCount" placeholder="请输入最大线程数" />
-              </el-form-item>
-            </el-form>
-          </el-tab-pane>
-          <el-tab-pane label="全局参数" name="globalParameters">
-            <el-table
-              :data="globalParameters"
-              element-loading-text="加载中"
-              empty-text="暂未设置全局参数"
-              stripe
-              border
-              size="mini"
-              max-height="136"
-            >
-              <el-table-column label="参数名称" prop="parameterNname">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.parameterNname" size="mini" placeholder="请输入参数名称" />
-                </template>
-              </el-table-column>
-              <el-table-column label="参数值" prop="parameterValue">
-                <template slot-scope="scope">
-                  <textarea ref="codemirror_parameterValue" v-model="scope.row.parameterValue" codemirror="parameterValue" placeholder="请输入参数值" />
-                </template>
-              </el-table-column>
-              <el-table-column label="参数描述" prop="parameterDescription">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.parameterDescription" size="mini" placeholder="请输入参数描述" />
-                </template>
-              </el-table-column>
-              <el-table-column align="right" width="150px">
-                <template slot="header">
-                  <el-button type="text" @click="handleAddGlobalParameter">添加一个</el-button>
-                  <!-- TODO: -->
-                  <el-button type="text">批量设置</el-button>
-                </template>
-                <template slot-scope="scope">
-                  <el-button type="success" size="mini" icon="el-icon-top" circle />
-                  <el-button type="success" size="mini" icon="el-icon-bottom" circle />
-                  <el-button type="danger" size="mini" icon="el-icon-delete" circle @click="handleDelGlobalParameter(scope.$index)" />
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-tab-pane>
-          <el-tab-pane label="全局 Cookies" name="globalCookies">
-            <el-table
-              :data="globalCookies"
-              element-loading-text="加载中..."
-              empty-text="暂未设置全局 Cookies"
-              stripe
-              border
-              size="mini"
-              max-height="136"
-            >
-              <el-table-column label="Cookie 名称" prop="cookieName">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.cookieName" size="mini" placeholder="请输入 Cookie 名称" />
-                </template>
-              </el-table-column>
-              <el-table-column label="Cookie 值" prop="cookieValue">
-                <template slot-scope="scope">
-                  <textarea ref="codemirror_cookieValue" v-model="scope.row.cookieValue" codemirror="cookieValue" placeholder="请输入 Cookie 值" />
-                </template>
-              </el-table-column>
-              <el-table-column label="Cookie 描述" prop="cookieDescription">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.cookieDescription" size="mini" placeholder="请输入 Cookie 描述" />
-                </template>
-              </el-table-column>
-              <el-table-column align="right" width="150px">
-                <template slot="header">
-                  <el-button type="text" @click="handleAddGlobalCookie">添加一个</el-button>
-                  <el-button type="text">批量设置</el-button>
-                </template>
-                <template slot-scope="scope">
-                  <el-button type="success" size="mini" icon="el-icon-top" circle />
-                  <el-button type="success" size="mini" icon="el-icon-bottom" circle />
-                  <el-button type="danger" size="mini" icon="el-icon-delete" circle @click="handleDelGlobalCookie(scope.$index)" />
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-tab-pane>
-          <el-tab-pane label="全局 Header" name="globalHeaders">
-            <el-table
-              :data="globalHeaders"
-              element-loading-text="加载中..."
-              empty-text="暂未设置全局 Header"
-              stripe
-              border
-              size="mini"
-              max-height="136"
-            >
-              <el-table-column label="Header 名称" prop="headerName">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.headerName" size="mini" placeholder="请输入 Header 名称" />
-                </template>
-              </el-table-column>
-              <el-table-column label="Header 值" prop="headerValue">
-                <template slot-scope="scope">
-                  <textarea ref="codemirror_headerValue" v-model="scope.row.headerValue" codemirror="headerValue" placeholder="请输入 Header 值" />
-                </template>
-              </el-table-column>
-              <el-table-column label="Header 描述" prop="headerDescription">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.headerDescription" size="mini" placeholder="请输入 Header 描述" />
-                </template>
-              </el-table-column>
-              <el-table-column align="right" width="150px">
-                <template slot="header">
-                  <el-button type="text" @click="handleAddGlobalHeader">添加一个</el-button>
-                  <el-button type="text">批量设置</el-button>
-                </template>
-                <template slot-scope="scope">
-                  <el-button type="success" size="mini" icon="el-icon-top" circle />
-                  <el-button type="success" size="mini" icon="el-icon-bottom" circle />
-                  <el-button type="danger" size="mini" icon="el-icon-delete" circle @click="handleDelGlobalHeader(scope.$index)" />
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-tab-pane>
-        </el-tabs>
+      <div class="properties-container" :version="version">
+        <component :is="currentTemplate" :editor="editor" :cell="selectCell"></component>
       </div>
     </el-footer>
   </el-container>
@@ -252,43 +118,34 @@ import '@/libs/codemirror/addon/show-hint'
 import { initHint } from '@/libs/codemirror/addon/spiderflow-hint'
 import { SpiderEditor } from '@/libs/spidereditor/spider-editor'
 import { loadShapes } from '@/libs/spidereditor/editor'
-
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/idea.css'
+import {JsonProperty} from "../../libs/spidereditor/spider-editor";
 
 export default {
   data() {
     return {
       version: 'latest',
-      cellid: '0',
-      // 默认激活的选项卡
-      tabActiveName: 'globalProperties',
-      // 全局配置表单
-      propertiesForm: {
-        spiderName: '未定义名称',
-        submitStrategy: 'random',
-        threadCount: ''
+      selectCell:{
+        id:'',
+        data:new JsonProperty()
       },
-      // 全局参数表单
-      globalParameterForm: {
-      },
-      // 全局参数
-      globalParameters: [],
-      // 全局 Cookies
-      globalCookies: [],
-      // 全局 Headers
-      globalHeaders: [],
       // 图表编辑器
-      editor: {},
-      propertiesFormRules: {
-        spiderName: [
-          { required: true, message: '请输入爬虫名称', trigger: 'blur' }
-        ],
-        threadCount: [
-          { pattern: /^[1-9]+(\d+)?$/, message: '线程数不能小于 1', trigger: 'blur' }
-        ]
-      }
+      editor: {}
     }
+  },
+  computed: {
+      currentTemplate(){
+        var template = '';
+        if(this.selectCell.edge == 1){
+            template= 'edge';
+        }else if(this.selectCell.data&&this.selectCell.data.get('shape') === undefined){
+            template= 'root';
+        }else{
+            template= this.selectCell.data.get('shape') || 'root'
+        }
+        return () => import(`@/views/template/${template}`);
+      }
   },
   mounted() {
     this.renderSpiderEditor()
@@ -356,10 +213,17 @@ export default {
       // 将 codemirror 的生命周期交由 vue 管理
       gp.codemirror = codemirror
     },
+    onSelectedCell(cell){
+       this.selectCell = cell;
+    },
     // 渲染 spider editor
     renderSpiderEditor() {
+      const _this = this;
       const editor = new SpiderEditor({
-        element: this.$refs.editorContainer
+        element: this.$refs.editorContainer,
+        selectedCellListener: function(sender,evt){
+            _this.onSelectedCell(sender,evt);
+        }
       })
       // 加载图形
       loadShapes(editor, this.$refs.toolbarContainer.$el)
@@ -368,6 +232,15 @@ export default {
     // 处理删除图形
     handleDelSelectCells() {
       this.editor.deleteSelectCells()
+    }
+  },
+  watch:{
+    'selectCell.value' : {
+      handler(newValue){
+        if(this.selectCell.valueChanged){
+          this.editor.graph.model.setValue(this.selectCell,newValue);
+        }
+      }
     }
   }
 }
@@ -468,8 +341,15 @@ div.mxRubberband {
 .el-aside {
   background-color: #F6F6F6;
   color: #333;
-  text-align: center;
   min-width: 80px;
+  writing-mode: vertical-lr;
+}
+.el-aside img{
+  width: 32px;
+  height: 32px;
+  padding: 5px;
+  margin: 2px;
+  box-sizing: content-box;
 }
 
 .el-main {
