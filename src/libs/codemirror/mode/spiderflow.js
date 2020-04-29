@@ -9,7 +9,7 @@
   } else if (typeof define == 'function' && define.amd) { // AMD
     define(['codemirror/lib/codemirror'], mod)
   } else { // Plain browser env
-    mod(CodeMirror)
+    mod(require('codemirror/lib/codemirror'))
   }
 })(function(CodeMirror) {
   'use strict'

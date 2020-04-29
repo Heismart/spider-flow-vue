@@ -1,30 +1,32 @@
 import Vue from 'vue'
-
-import 'normalize.css/normalize.css' // A modern alternative to CSS resets
-// TODO: 按需引入
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
-// import locale from 'element-ui/lib/locale/lang/en' // lang i18n
-
-import '@/styles/index.scss' // global css
-
-import App from './App'
-import store from './store'
+import App from './App.vue'
+import Storage from 'vue-ls'
 import router from './router'
-
-import '@/icons' // icon
+import store from './store/'
+import {
+  VueAxios
+} from "@/utils/request"
+import Antd from 'ant-design-vue'
+import 'ant-design-vue/dist/antd.less'; // or 'ant-design-vue/dist/antd.less'
 import '@/permission' // permission control
-
-// set ElementUI lang to EN
-// Vue.use(ElementUI, { locale })
-// 如果想要中文版 element-ui，按如下方式声明
-Vue.use(ElementUI)
+import '@/utils/filter' // base filter
+/*import '@babel/polyfill'*/
+import {
+  ACCESS_TOKEN
+} from "@/store/mutation-types"
+import hasPermission from '@/utils/hasPermission'
 
 Vue.config.productionTip = false
+Vue.use(Storage)
+Vue.use(Antd)
+Vue.use(VueAxios, router)
+Vue.use(hasPermission)
 
 new Vue({
-  el: '#app',
   router,
   store,
+  mounted() {
+    store.commit('SET_TOKEN', Vue.ls.get(ACCESS_TOKEN))
+  },
   render: h => h(App)
-})
+}).$mount('#app')

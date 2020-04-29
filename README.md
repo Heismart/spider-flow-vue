@@ -1,39 +1,72 @@
-# spider-flow-vue
+## 介绍
+平台以流程图的方式定义爬虫,是一个高度灵活可配置的爬虫平台
 
-#### 介绍
-{**以下是码云平台说明，您可以替换此简介**
-码云是 OSCHINA 推出的基于 Git 的代码托管平台（同时支持 SVN）。专为开发者提供稳定、高效、安全的云端软件开发协作平台
-无论是个人、团队、或是企业，都能够用码云实现代码托管、项目管理、协作开发。企业项目请看 [https://gitee.com/enterprises](https://gitee.com/enterprises)}
+开源框架
+<br/>https://www.antdv.com/docs/vue/introduce-cn/</br>
+<br/>https://pro.loacg.com/</br>
 
-#### 软件架构
-软件架构说明
+## 开发介绍
+### 1、目录介绍
+- ├─api 接口
+- ├─assets 资源文件
+- │  └─less 样式
+- ├─components 公用组件（非页面）
+- │  ├─layouts 布局
+- │  ├─menu 菜单
+- │  ├─page 页面模块
+- │  ├─setting 设置
+- │  ├─tools 工具
+- │  └─_util 工具包
+- ├─config 配置信息
+- ├─router 路由
+- ├─store 全局变量
+- │  └─modules 变量模块
+- ├─utils 工具包
+- │  └─encryption 加密工具
+- └─views 视图页面
 
+### 2、添加开发者菜单
+<br/>src\config\router.config.dev.js</br>
+格式和说明
+----
 
-#### 安装教程
+```javascript
+/**
+ * 路由配置说明：
+ * 建议：sider menu 请不要超过三级菜单，若超过三级菜单，则应该设计为顶部主菜单 配合左侧次级菜单
+ *
+ **/
+ {
+  redirect: noredirect,
+  name: 'router-name',
+  hidden: true,
+  meta: {
+    title: 'title',
+    icon: 'a-icon',
+    keepAlive: true,
+    hiddenHeaderContent: true,
+  }
+}
+```
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+`{ Route }` 对象
 
-#### 使用说明
+| 参数     | 说明                                      | 类型    | 默认值 |
+| -------- | ----------------------------------------- | ------- | ------ |
+| hidden   | 控制路由是否显示在 sidebar                | boolean | falase |
+| redirect | 重定向地址, 访问这个路由时,自定进行重定向 | string  | -      |
+| name     | 路由名称, 建议设置,且不能重名             | string  | -      |
+| meta     | 路由元信息（路由附带扩展信息）            | object  | {}     |
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+`{ Meta }` 路由元信息对象
+| 参数                | 说明                                                         | 类型    | 默认值 |
+| ------------------- | ------------------------------------------------------------ | ------- | ------ |
+| title               | 路由标题, 用于显示面包屑, 页面标题 *推荐设置                 | string  | -      |
+| icon                | 路由在 menu 上显示的图标，支持ant design官网图标               | string  | -      |
+| keepAlive           | 缓存该路由                                                   | boolean | false  |
+| hiddenHeaderContent | *特殊 隐藏 [PageHeader](https://github.com/sendya/ant-design-pro-vue/blob/master/src/components/layout/PageHeader.vue#L14) 组件中的页面带的 面包屑和页面标题栏 | boolean | false  |
+| permission          | 与项目提供的权限拦截匹配的权限，如果不匹配，则会被禁止访问该路由页面 | array   | []     |
 
-#### 参与贡献
+### 3、页面添加位置
+全部的页面都放在src\views里建一个文件夹
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
-
-
-#### 码云特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  码云官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解码云上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
-5.  码云官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)

@@ -1,8 +1,10 @@
-import request from '@/utils/request'
+import {
+  axios
+} from '@/utils/request'
 
 // 获取爬虫列表
 export function getSpiderList(params) {
-  return request({
+  return axios({
     url: '/spider/list',
     method: 'get',
     params
@@ -11,7 +13,7 @@ export function getSpiderList(params) {
 
 // 开启定时任务
 export function start(params) {
-  return request({
+  return axios({
     url: '/spider/start',
     method: 'get',
     params
@@ -20,7 +22,7 @@ export function start(params) {
 
 // 关闭定时任务
 export function stop(params) {
-  return request({
+  return axios({
     url: '/spider/stop',
     method: 'get',
     params
@@ -29,7 +31,7 @@ export function stop(params) {
 
 // 获取所有的 grammers
 export function getGrammers(data) {
-  return request({
+  return axios({
     url: '/spider/grammers',
     method: 'post',
     data

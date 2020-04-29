@@ -1,117 +1,117 @@
 <template>
-  <el-container>
-    <el-header height="42">
-      <el-tooltip class="item" effect="light" content="保存（Ctrl+S）" placement="bottom" :open-delay="500" :enterable="false">
-        <el-button type="primary" size="mini" circle>
+  <a-layout>
+    <a-layout-header height="42">
+      <a-tooltip class="item" effect="light" content="保存（Ctrl+S）" placement="bottom" :open-delay="500" :enterable="false">
+        <a-button type="primary" size="mini" circle>
           <template>
             <svg-icon icon-class="save" />
           </template>
-        </el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="light" content="测试（Ctrl+Q）" placement="bottom" :open-delay="500" :enterable="false">
-        <el-button type="primary" size="mini" icon="el-icon-caret-right" circle />
-      </el-tooltip>
-      <el-tooltip class="item" effect="light" content="撤销（Ctrl+Z）" placement="bottom" :open-delay="500" :enterable="false">
-        <el-button type="primary" size="mini" circle>
+        </a-button>
+      </a-tooltip>
+      <a-tooltip class="item" effect="light" content="测试（Ctrl+Q）" placement="bottom" :open-delay="500" :enterable="false">
+        <a-button type="primary" size="mini" icon="el-icon-caret-right" circle />
+      </a-tooltip>
+      <a-tooltip class="item" effect="light" content="撤销（Ctrl+Z）" placement="bottom" :open-delay="500" :enterable="false">
+        <a-button type="primary" size="mini" circle>
           <template>
             <svg-icon icon-class="cancel" />
           </template>
-        </el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="light" content="反撤销（Ctrl+Y）" placement="bottom" :open-delay="500" :enterable="false">
-        <el-button type="primary" size="mini" circle>
+        </a-button>
+      </a-tooltip>
+      <a-tooltip class="item" effect="light" content="反撤销（Ctrl+Y）" placement="bottom" :open-delay="500" :enterable="false">
+        <a-button type="primary" size="mini" circle>
           <template>
             <svg-icon icon-class="uncancel" />
           </template>
-        </el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="light" content="历史版本" placement="bottom" :open-delay="500" :enterable="false">
-        <el-button type="primary" size="mini" circle>
+        </a-button>
+      </a-tooltip>
+      <a-tooltip class="item" effect="light" content="历史版本" placement="bottom" :open-delay="500" :enterable="false">
+        <a-button type="primary" size="mini" circle>
           <template>
             <svg-icon icon-class="history1" />
           </template>
-        </el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="light" content="全选（Ctrl+A）" placement="bottom" :open-delay="500" :enterable="false">
-        <el-button type="primary" size="mini" circle>
+        </a-button>
+      </a-tooltip>
+      <a-tooltip class="item" effect="light" content="全选（Ctrl+A）" placement="bottom" :open-delay="500" :enterable="false">
+        <a-button type="primary" size="mini" circle>
           <template>
             <svg-icon icon-class="multi" />
           </template>
-        </el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="light" content="剪切（Ctrl+X）" placement="bottom" :open-delay="500" :enterable="false">
-        <el-button type="primary" size="mini" icon="el-icon-scissors" circle />
-      </el-tooltip>
-      <el-tooltip class="item" effect="light" content="复制（Ctrl+C）" placement="bottom" :open-delay="500" :enterable="false">
-        <el-button type="primary" size="mini" circle>
+        </a-button>
+      </a-tooltip>
+      <a-tooltip class="item" effect="light" content="剪切（Ctrl+X）" placement="bottom" :open-delay="500" :enterable="false">
+        <a-button type="primary" size="mini" icon="el-icon-scissors" circle />
+      </a-tooltip>
+      <a-tooltip class="item" effect="light" content="复制（Ctrl+C）" placement="bottom" :open-delay="500" :enterable="false">
+        <a-button type="primary" size="mini" circle>
           <template>
             <svg-icon icon-class="copy" />
           </template>
-        </el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="light" content="粘贴（Ctrl+V）" placement="bottom" :open-delay="500" :enterable="false">
-        <el-button type="primary" size="mini" circle>
+        </a-button>
+      </a-tooltip>
+      <a-tooltip class="item" effect="light" content="粘贴（Ctrl+V）" placement="bottom" :open-delay="500" :enterable="false">
+        <a-button type="primary" size="mini" circle>
           <template>
             <svg-icon icon-class="paste" />
           </template>
-        </el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="light" content="删除（Delete）" placement="bottom" :open-delay="500" :enterable="false">
-        <el-button type="primary" size="mini" icon="el-icon-delete" circle @click="handleDelSelectCells" />
-      </el-tooltip>
-      <el-tooltip class="item" effect="light" content="编辑 XML" placement="bottom" :open-delay="500" :enterable="false">
-        <el-button type="primary" size="mini" circle>
+        </a-button>
+      </a-tooltip>
+      <a-tooltip class="item" effect="light" content="删除（Delete）" placement="bottom" :open-delay="500" :enterable="false">
+        <a-button type="primary" size="mini" icon="el-icon-delete" circle @click="handleDelSelectCells" />
+      </a-tooltip>
+      <a-tooltip class="item" effect="light" content="编辑 XML" placement="bottom" :open-delay="500" :enterable="false">
+        <a-button type="primary" size="mini" circle>
           <template>
             <svg-icon icon-class="xml" />
           </template>
-        </el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="light" content="打印 XML" placement="bottom" :open-delay="500" :enterable="false">
-        <el-button type="primary" size="mini" circle>
+        </a-button>
+      </a-tooltip>
+      <a-tooltip class="item" effect="light" content="打印 XML" placement="bottom" :open-delay="500" :enterable="false">
+        <a-button type="primary" size="mini" circle>
           <template>
             <svg-icon icon-class="print" />
           </template>
-        </el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="light" content="调试（Ctrl+Q）" placement="bottom" :open-delay="500" :enterable="false">
-        <el-button type="primary" size="mini" circle>
+        </a-button>
+      </a-tooltip>
+      <a-tooltip class="item" effect="light" content="调试（Ctrl+Q）" placement="bottom" :open-delay="500" :enterable="false">
+        <a-button type="primary" size="mini" circle>
           <template>
             <svg-icon icon-class="debug" />
           </template>
-        </el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="light" content="下一步" placement="bottom" :open-delay="500" :enterable="false">
-        <el-button type="primary" size="mini" circle>
+        </a-button>
+      </a-tooltip>
+      <a-tooltip class="item" effect="light" content="下一步" placement="bottom" :open-delay="500" :enterable="false">
+        <a-button type="primary" size="mini" circle>
           <template>
             <svg-icon icon-class="next" />
           </template>
-        </el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="light" content="停止" placement="bottom" :open-delay="500" :enterable="false">
-        <el-button type="primary" size="mini" circle>
+        </a-button>
+      </a-tooltip>
+      <a-tooltip class="item" effect="light" content="停止" placement="bottom" :open-delay="500" :enterable="false">
+        <a-button type="primary" size="mini" circle>
           <template>
             <svg-icon icon-class="stop" />
           </template>
-        </el-button>
-      </el-tooltip>
-    </el-header>
-    <el-container>
-      <el-aside ref="toolbarContainer" width="80px" class="toolbar-container"></el-aside>
-      <el-main>
+        </a-button>
+      </a-tooltip>
+    </a-layout-header>
+    <a-layout>
+      <a-layout-sider ref="toolbarContainer" width="80px" class="toolbar-container" />
+      <a-layout-content>
         <div ref="editorContainer" class="editor-container" />
-      </el-main>
-    </el-container>
-    <el-footer height="200px">
+      </a-layout-content>
+    </a-layout>
+    <a-layout-footer height="200px">
       <div class="properties-container" :version="version">
-        <component :is="currentTemplate" :editor="editor" :cell="selectCell"></component>
+        <component :is="currentTemplate" :editor="editor" :cell="selectCell" />
       </div>
-    </el-footer>
-  </el-container>
+    </a-layout-footer>
+  </a-layout>
 </template>
 
 <script>
 import CodeMirror from 'codemirror/lib/codemirror'
-import '@/libs/codemirror/mode/spiderflow'
+import spiderflow from '@/libs/codemirror/mode/spiderflow'
 import 'codemirror/mode/sql/sql'
 import '@/libs/codemirror/addon/placeholder'
 import '@/libs/codemirror/addon/show-hint'
@@ -120,32 +120,41 @@ import { SpiderEditor } from '@/libs/spidereditor/spider-editor'
 import { loadShapes } from '@/libs/spidereditor/editor'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/idea.css'
-import {JsonProperty} from "../../libs/spidereditor/spider-editor";
+import { JsonProperty } from '../../libs/spidereditor/spider-editor'
 
 export default {
   data() {
     return {
       version: 'latest',
-      selectCell:{
-        id:'',
-        data:new JsonProperty()
+      selectCell: {
+        id: '',
+        data: new JsonProperty()
       },
       // 图表编辑器
       editor: {}
     }
   },
   computed: {
-      currentTemplate(){
-        var template = '';
-        if(this.selectCell.edge == 1){
-            template= 'edge';
-        }else if(this.selectCell.data&&this.selectCell.data.get('shape') === undefined){
-            template= 'root';
-        }else{
-            template= this.selectCell.data.get('shape') || 'root'
-        }
-        return () => import(`@/views/template/${template}`);
+    currentTemplate() {
+      var template = ''
+      if (this.selectCell.edge === 1) {
+        template = 'edge'
+      } else if (this.selectCell.data && this.selectCell.data.get('shape') === undefined) {
+        template = 'root'
+      } else {
+        template = this.selectCell.data.get('shape') || 'root'
       }
+      return () => import(`@/views/spider/template/${template}`)
+    }
+  },
+  watch: {
+    'selectCell.value': {
+      handler(newValue) {
+        if (this.selectCell.valueChanged) {
+          this.editor.graph.model.setValue(this.selectCell, newValue)
+        }
+      }
+    }
   },
   mounted() {
     this.renderSpiderEditor()
@@ -213,16 +222,16 @@ export default {
       // 将 codemirror 的生命周期交由 vue 管理
       gp.codemirror = codemirror
     },
-    onSelectedCell(cell){
-       this.selectCell = cell;
+    onSelectedCell(cell) {
+      this.selectCell = cell
     },
     // 渲染 spider editor
     renderSpiderEditor() {
-      const _this = this;
+      const _this = this
       const editor = new SpiderEditor({
         element: this.$refs.editorContainer,
-        selectedCellListener: function(sender,evt){
-            _this.onSelectedCell(sender,evt);
+        selectedCellListener: function(sender, evt) {
+          _this.onSelectedCell(sender, evt)
         }
       })
       // 加载图形
@@ -232,15 +241,6 @@ export default {
     // 处理删除图形
     handleDelSelectCells() {
       this.editor.deleteSelectCells()
-    }
-  },
-  watch:{
-    'selectCell.value' : {
-      handler(newValue){
-        if(this.selectCell.valueChanged){
-          this.editor.graph.model.setValue(this.selectCell,newValue);
-        }
-      }
     }
   }
 }
@@ -323,9 +323,6 @@ div.mxRubberband {
 	border-color: #0000FF;
 	background: #0077FF;
 }
-</style>
-
-<style scoped>
 .el-row {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -378,7 +375,7 @@ div.mxRubberband {
   line-height: 320px;
 }
 
-.el-button--text {
+.a-button--text {
   font-size: 13px;
   padding-top: 2px;
   padding-bottom: 2px;
