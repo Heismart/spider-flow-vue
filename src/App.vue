@@ -1,44 +1,50 @@
 <template>
-  <a-config-provider :locale="locale">
-    <div id="app">
-      <router-view/>
-    </div>
-  </a-config-provider>
+  <div id="app">
+    <router-view />
+  </div>
 </template>
+
 <script>
-  import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
-  import enquireScreen from '@/utils/device'
-
-  export default {
-    data () {
-      return {
-        locale: zhCN,
+import { mapMutations } from 'vuex'
+import {
+  isDevelopment
+} from '@/util/util.js'
+export default {
+  name: 'App',
+  methods: {
+    ...mapMutations(['setRoutesConfig']),
+    loadDefaultRoutes() {
+      let loadRoutes = this.$config.loadRoutes || []
+      // 加入开发者配置路由
+      if (isDevelopment() && this.$config.development.loadRoutes.length && this.$config.development.loadRoutes.length > 0) {
+        loadRoutes = loadRoutes.concat(this.$config.development.loadRoutes)
       }
-    },
-    created () {
-      let that = this
-      enquireScreen(deviceType => {
-        // tablet
-        if (deviceType === 0) {
-          that.$store.commit('TOGGLE_DEVICE', 'mobile')
-          that.$store.dispatch('setSidebar', false)
-        }
-        // mobile
-        else if (deviceType === 1) {
-          that.$store.commit('TOGGLE_DEVICE', 'mobile')
-          that.$store.dispatch('setSidebar', false)
-        }
-        else {
-          that.$store.commit('TOGGLE_DEVICE', 'desktop')
-          that.$store.dispatch('setSidebar', true)
-        }
-
+      loadRoutes.forEach(element => {
+        import('@/' + element).then(data => {
+          this.setRoutesConfig(data.default)
+        })
       })
     }
+  },
+  mounted() {
+    this.loadDefaultRoutes()
   }
+}
 </script>
-<style>
-  #app {
-    height: 100%;
-  }
+
+<style lang="less">
+.size {
+  width: 100%;
+  height: 100%;
+}
+html,
+body {
+  .size;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+#app {
+  .size;
+}
 </style>

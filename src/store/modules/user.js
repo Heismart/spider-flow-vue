@@ -1,175 +1,53 @@
-import Vue from 'vue'
-import {
-  login,
-  logout
-} from "@/api/login"
-import {
-  ACCESS_TOKEN,
-  USER_NAME,
-  USER_INFO,
-  USER_AUTH,
-  SYS_BUTTON_AUTH
-} from "@/store/mutation-types"
-import {
-  welcome
-} from "@/utils/util"
-import {
-  queryPermissionsByUser
-} from '@/api/api'
-import {
-  getAction
-} from '@/api/manage'
-import config from '@/config/system.config'
-import routerDev from '@/config/router.config.dev'
-
-let permissionList = []
-if (config.isDev === true) {
-  permissionList = routerDev[0].children;
+const defaultUserInfo = {
+  'id': '',
+  'status': 'using',
+  'createDate': null,
+  'updateDate': null,
+  'note': null,
+  'nickname': '未登录',
+  'headimg': null,
+  'signature': null,
+  'info': null,
+  'sex': null,
+  'birthday': null,
+  'job': null,
+  'addr': null
 }
-
-const user = {
+const sessionUserInfoKey = 'sessionUserInfo'
+let sessionUserInfo = null
+try {
+  sessionUserInfo = JSON.parse(sessionStorage.getItem(sessionUserInfoKey))
+} catch (error) {
+  console.error('从sessionUserInfo获取用户失败')
+  console.error(error)
+}
+export default {
   state: {
-    token: '',
-    username: '',
-    realname: '',
-    welcome: '',
-    avatar: '',
-    permissionList,
-    info: {},
-    device: 'desktop',
-    sidebar: {
-      opened: true,
-      withoutAnimation: false
-    },
+    /**
+     * @description 用户信息
+     */
+    userInfo: sessionUserInfo || defaultUserInfo
   },
-
+  getters: {
+    /**
+     * @description 是否登录用户
+     */
+    isLoginUser: state => !!state.userInfo.id
+  },
   mutations: {
-    SET_TOKEN: (state, token) => {
-      state.token = token
+    setUserInfo(state, userInfo) {
+      state.userInfo = userInfo
+      sessionStorage.setItem(sessionUserInfoKey, JSON.stringify(userInfo))
     },
-    SET_NAME: (state, {
-      username,
-      realname,
-      welcome
-    }) => {
-      state.username = username
-      state.realname = realname
-      state.welcome = welcome
-    },
-    SET_AVATAR: (state, avatar) => {
-      state.avatar = avatar
-    },
-    SET_PERMISSIONLIST: (state, permissionList) => {
-      state.permissionList = permissionList
-    },
-    SET_INFO: (state, info) => {
-      state.info = info
-    },
-    TOGGLE_DEVICE: (state, device) => {
-      state.device = device
-    },
-    SET_SIDEBAR_TYPE: (state, type) => {
-      state.sidebar.opened = type
-    },
-  },
-
-  actions: {
-    setSidebar: ({
-      commit
-    }, type) => {
-      commit('SET_SIDEBAR_TYPE', type)
-    },
-    // 登录
-    Login({
-      commit
-    }, userInfo) {
-      return new Promise((resolve, reject) => {
-        login(userInfo).then(response => {
-          if (response.code == '200') {
-            const result = response.result
-            const userInfo = result.userInfo
-            Vue.ls.set(ACCESS_TOKEN, result.token, 7 * 24 * 60 * 60 * 1000)
-            Vue.ls.set(USER_NAME, userInfo.username, 7 * 24 * 60 * 60 * 1000)
-            Vue.ls.set(USER_INFO, userInfo, 7 * 24 * 60 * 60 * 1000)
-            commit('SET_TOKEN', result.token)
-            commit('SET_INFO', userInfo)
-            commit('SET_NAME', {
-              username: userInfo.username,
-              realname: userInfo.realname,
-              welcome: welcome()
-            })
-            commit('SET_AVATAR', userInfo.avatar)
-            resolve(response)
-          } else {
-            reject(response)
-          }
-        }).catch(error => {
-          reject(error)
-        })
+    initUserInfo(state, vue) {
+      state.userInfo = defaultUserInfo
+      sessionStorage.removeItem(sessionUserInfoKey)
+      vue.$router.push({
+        name: vue.$config.loginRouteName
       })
     },
-    // 获取用户信息
-    GetPermissionList({
-      commit
-    }) {
-      return new Promise((resolve, reject) => {
-        let v_token = Vue.ls.get(ACCESS_TOKEN);
-        let params = {
-          token: v_token
-        };
-        queryPermissionsByUser(params).then(response => {
-          const menuData = response.result.menu;
-          const authData = response.result.auth;
-          const allAuthData = response.result.allAuth;
-          //Vue.ls.set(USER_AUTH,authData);
-          sessionStorage.setItem(USER_AUTH, JSON.stringify(authData));
-          sessionStorage.setItem(SYS_BUTTON_AUTH, JSON.stringify(allAuthData));
-          if (menuData && menuData.length > 0) {
-            menuData.forEach((item, index) => {
-              if (item["children"]) {
-                let hasChildrenMenu = item["children"].filter((i) => {
-                  return !i.hidden || i.hidden == false
-                })
-                if (hasChildrenMenu == null || hasChildrenMenu.length == 0) {
-                  item["hidden"] = true
-                }
-              }
-            })
-            console.log(" menu show json ", menuData)
-            commit('SET_PERMISSIONLIST', menuData)
-          } else {
-            reject('getPermissionList: permissions must be a non-null array !')
-          }
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-
-    // 登出
-    Logout({
-      commit,
-      state
-    }) {
-      return new Promise((resolve) => {
-        let logoutToken = state.token;
-        commit('SET_TOKEN', '')
-        commit('SET_PERMISSIONLIST', [])
-        Vue.ls.remove(ACCESS_TOKEN)
-        //console.log('logoutToken: '+ logoutToken)
-        logout(logoutToken).then(() => {
-          //var sevice = "http://"+window.location.host+"/";
-          //var serviceUrl = encodeURIComponent(sevice);
-          //window.location.href = window._CONFIG['casPrefixUrl']+"/logout?service="+serviceUrl;
-          resolve()
-        }).catch(() => {
-          resolve()
-        })
-      })
-    },
-
+    isLogin(state) {
+      return state => !!state.userInfo.id
+    }
   }
 }
-
-export default user

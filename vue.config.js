@@ -1,74 +1,46 @@
 const path = require('path')
 
-function resolve(dir) {
+const resolve = dir => {
   return path.join(__dirname, dir)
 }
 
-// vue.config.js
+// 项目部署基础
+// 默认情况下，我们假设你的应用将被部署在域的根目录下,
+// 例如：https://www.my-app.com/
+// 默认：'/'
+// 如果您的应用程序部署在子路径中，则需要在这指定子路径
+// 例如：https://www.foobar.com/my-app/
+// 需要将它改为'/my-app/'
+// iview-admin线上演示打包路径： https://file.iviewui.com/admin-dist/
+const BASE_URL = process.env.NODE_ENV === 'production' ? '/' : '/'
+
 module.exports = {
-  /*
-    Vue-cli3:
-    Crashed when using Webpack `import()` #2463
-    https://github.com/vuejs/vue-cli/issues/2463
-   */
-  // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建。
-  productionSourceMap: false,
-
-  // 打包app时放开该配置
-  // publicPath:'./',
-  configureWebpack: config => {
-    // 生产环境取消 console.log
-    if (process.env.NODE_ENV === 'production') {
-      config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true
-    }
-  },
-  chainWebpack: (config) => {
+  // Project deployment base
+  // By default we assume your app will be deployed at the root of a domain,
+  // e.g. https://www.my-app.com/
+  // If your app is deployed at a sub-path, you will need to specify that
+  // sub-path here. For example, if your app is deployed at
+  // https://www.foobar.com/my-app/
+  // then change this to '/my-app/'
+  publicPath: BASE_URL,
+  // tweak internal webpack configuration.
+  // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
+  // 如果你不需要使用eslint，把lintOnSave设为false即可
+  lintOnSave: true,
+  chainWebpack: config => {
     config.resolve.alias
-      .set('@$', resolve('src'))
-      .set('@api', resolve('src/api'))
-      .set('@assets', resolve('src/assets'))
-      .set('@comp', resolve('src/components'))
-      .set('@views', resolve('src/views'))
-      .set('@layout', resolve('src/layout'))
-
-    // 配置 webpack 识别 markdown 为普通的文件
-    config.module
-      .rule('markdown')
-      .test(/\.md$/)
-      .use()
-      .loader('file-loader')
-      .end()
+      .set('@', resolve('src')) // key,value自行定义，比如.set('@@', resolve('src/components'))
+      .set('public', resolve('public'))
     // 移除 prefetch 插件
     config.plugins.delete('prefetch')
     // 移除 preload 插件
     config.plugins.delete('preload')
     config.output.filename('js/[name].[hash].js').end()
   },
-
-  css: {
-    loaderOptions: {
-      less: {
-        modifyVars: {
-          /* less 变量覆盖，用于自定义 ant design 主题 */
-          'primary-color': '#1890FF',
-          'link-color': '#1890FF',
-          'border-radius-base': '4px'
-        },
-        javascriptEnabled: true
-      }
-    }
-  },
-
-  devServer: {
-    port: 3000,
-    proxy: {
-      '/spider-flow': {
-        target: 'http://127.0.0.1:8088',
-        ws: false,
-        changeOrigin: true
-      }
-    }
-  },
-
-  lintOnSave: undefined
+  // 设为false打包时不生成.map文件
+  productionSourceMap: false
+  // 这里写你调用接口的基础路径，来解决跨域，如果设置了代理，那你本地开发环境的axios的baseUrl要写为 '' ，即空字符串
+  // devServer: {
+  //   proxy: 'localhost:3000'
+  // }
 }
