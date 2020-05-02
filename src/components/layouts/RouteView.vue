@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="main" style="height: 100%;">
   <keep-alive>
     <router-view v-if="keepAlive" />
   </keep-alive>

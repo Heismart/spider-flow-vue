@@ -1,7 +1,7 @@
 <template>
   <div>
-    <el-input v-model="cell.value" placeholder="请输入爬虫名称" />
-    <el-input v-cell:url placeholder="输入URL" />
+    <a-input v-model="cell.value" placeholder="请输入爬虫名称" />
+    <a-input v-cell:url placeholder="输入URL" />
 
   </div>
 </template>

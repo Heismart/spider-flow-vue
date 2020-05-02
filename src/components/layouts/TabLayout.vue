@@ -14,7 +14,7 @@
       @edit="editPage"
       @tabClick="tabCallBack"
       class="tab-layout-tabs"
-      style="height:52px"
+      style="height:50px"
       type="editable-card"
       v-if="multipage"
     >
@@ -22,7 +22,7 @@
         <span :pagekey="page.fullPath" slot="tab">{{ page.meta.title }}</span>
       </a-tab-pane>
     </a-tabs>
-    <div style="margin: 12px 12px 0;">
+    <div style="height: calc(100% - 50px);">
       <transition name="page-toggle">
         <router-view />
       </transition>

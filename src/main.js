@@ -22,6 +22,19 @@ Vue.use(Antd)
 Vue.use(VueAxios, router)
 Vue.use(hasPermission)
 
+Vue.directive('cell', {
+  inserted: function (el, binding, vnode, oldVnode) {
+    let key = binding.arg;
+    vnode.componentInstance.$on('change', function (e) {
+      this.$parent.cell.data.set(key, e.target.value)
+    })
+  },
+  bind: function (el, binding, vnode, oldVnode) {
+    let key = binding.arg;
+    vnode.componentInstance._props.value = vnode.componentInstance.$parent.cell.data.get(key)
+  }
+})
+
 new Vue({
   router,
   store,

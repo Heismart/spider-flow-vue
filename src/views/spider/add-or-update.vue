@@ -1,109 +1,26 @@
 <template>
-  <a-layout>
-    <a-layout-header height="42">
-      <a-tooltip class="item" effect="light" content="保存（Ctrl+S）" placement="bottom" :open-delay="500" :enterable="false">
-        <a-button type="primary" size="mini" circle>
-          <template>
-            <svg-icon icon-class="save" />
+  <a-layout style="height: 100%;">
+    <a-layout-header>
+      <template v-for="(item,index) in config.headerBtns">
+        <a-tooltip :key="'tool_' + index" placement="bottom">
+          <template slot="title">
+            <span>{{item.tooltip}}</span>
           </template>
-        </a-button>
-      </a-tooltip>
-      <a-tooltip class="item" effect="light" content="测试（Ctrl+Q）" placement="bottom" :open-delay="500" :enterable="false">
-        <a-button type="primary" size="mini" icon="el-icon-caret-right" circle />
-      </a-tooltip>
-      <a-tooltip class="item" effect="light" content="撤销（Ctrl+Z）" placement="bottom" :open-delay="500" :enterable="false">
-        <a-button type="primary" size="mini" circle>
-          <template>
-            <svg-icon icon-class="cancel" />
-          </template>
-        </a-button>
-      </a-tooltip>
-      <a-tooltip class="item" effect="light" content="反撤销（Ctrl+Y）" placement="bottom" :open-delay="500" :enterable="false">
-        <a-button type="primary" size="mini" circle>
-          <template>
-            <svg-icon icon-class="uncancel" />
-          </template>
-        </a-button>
-      </a-tooltip>
-      <a-tooltip class="item" effect="light" content="历史版本" placement="bottom" :open-delay="500" :enterable="false">
-        <a-button type="primary" size="mini" circle>
-          <template>
-            <svg-icon icon-class="history1" />
-          </template>
-        </a-button>
-      </a-tooltip>
-      <a-tooltip class="item" effect="light" content="全选（Ctrl+A）" placement="bottom" :open-delay="500" :enterable="false">
-        <a-button type="primary" size="mini" circle>
-          <template>
-            <svg-icon icon-class="multi" />
-          </template>
-        </a-button>
-      </a-tooltip>
-      <a-tooltip class="item" effect="light" content="剪切（Ctrl+X）" placement="bottom" :open-delay="500" :enterable="false">
-        <a-button type="primary" size="mini" icon="el-icon-scissors" circle />
-      </a-tooltip>
-      <a-tooltip class="item" effect="light" content="复制（Ctrl+C）" placement="bottom" :open-delay="500" :enterable="false">
-        <a-button type="primary" size="mini" circle>
-          <template>
-            <svg-icon icon-class="copy" />
-          </template>
-        </a-button>
-      </a-tooltip>
-      <a-tooltip class="item" effect="light" content="粘贴（Ctrl+V）" placement="bottom" :open-delay="500" :enterable="false">
-        <a-button type="primary" size="mini" circle>
-          <template>
-            <svg-icon icon-class="paste" />
-          </template>
-        </a-button>
-      </a-tooltip>
-      <a-tooltip class="item" effect="light" content="删除（Delete）" placement="bottom" :open-delay="500" :enterable="false">
-        <a-button type="primary" size="mini" icon="el-icon-delete" circle @click="handleDelSelectCells" />
-      </a-tooltip>
-      <a-tooltip class="item" effect="light" content="编辑 XML" placement="bottom" :open-delay="500" :enterable="false">
-        <a-button type="primary" size="mini" circle>
-          <template>
-            <svg-icon icon-class="xml" />
-          </template>
-        </a-button>
-      </a-tooltip>
-      <a-tooltip class="item" effect="light" content="打印 XML" placement="bottom" :open-delay="500" :enterable="false">
-        <a-button type="primary" size="mini" circle>
-          <template>
-            <svg-icon icon-class="print" />
-          </template>
-        </a-button>
-      </a-tooltip>
-      <a-tooltip class="item" effect="light" content="调试（Ctrl+Q）" placement="bottom" :open-delay="500" :enterable="false">
-        <a-button type="primary" size="mini" circle>
-          <template>
-            <svg-icon icon-class="debug" />
-          </template>
-        </a-button>
-      </a-tooltip>
-      <a-tooltip class="item" effect="light" content="下一步" placement="bottom" :open-delay="500" :enterable="false">
-        <a-button type="primary" size="mini" circle>
-          <template>
-            <svg-icon icon-class="next" />
-          </template>
-        </a-button>
-      </a-tooltip>
-      <a-tooltip class="item" effect="light" content="停止" placement="bottom" :open-delay="500" :enterable="false">
-        <a-button type="primary" size="mini" circle>
-          <template>
-            <svg-icon icon-class="stop" />
-          </template>
-        </a-button>
-      </a-tooltip>
+          <a-button @click="getMethod(item.click)" shape="circle" size="default" type="primary">
+            <a-icon :type="item.icon" />
+          </a-button>
+        </a-tooltip>
+      </template>
     </a-layout-header>
     <a-layout>
-      <a-layout-sider ref="toolbarContainer" width="80px" class="toolbar-container" />
+      <a-layout-sider class="toolbar-container" ref="toolbarContainer" width="50" />
       <a-layout-content>
-        <div ref="editorContainer" class="editor-container" />
+        <div class="editor-container" ref="editorContainer" />
       </a-layout-content>
     </a-layout>
-    <a-layout-footer height="200px">
-      <div class="properties-container" :version="version">
-        <component :is="currentTemplate" :editor="editor" :cell="selectCell" />
+    <a-layout-footer>
+      <div :version="version" class="properties-container">
+        <component :cell="selectCell" :editor="editor" :is="currentTemplate" />
       </div>
     </a-layout-footer>
   </a-layout>
@@ -121,6 +38,7 @@ import { loadShapes } from '@/libs/spidereditor/editor'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/idea.css'
 import { JsonProperty } from '../../libs/spidereditor/spider-editor'
+import headerBtns from './jsonConfig/headerBtns'
 
 export default {
   data() {
@@ -131,7 +49,8 @@ export default {
         data: new JsonProperty()
       },
       // 图表编辑器
-      editor: {}
+      editor: {},
+      config: { headerBtns }
     }
   },
   computed: {
@@ -144,7 +63,7 @@ export default {
       } else {
         template = this.selectCell.data.get('shape') || 'root'
       }
-      return () => import(`@/views/spider/template/${template}`)
+      return () => import(`@/views/spider/template/${template}.vue`)
     }
   },
   watch: {
@@ -160,6 +79,9 @@ export default {
     this.renderSpiderEditor()
   },
   methods: {
+    getMethod(methodName) {
+      this[methodName]()
+    },
     // 处理添加一行全局参数
     handleAddGlobalParameter() {
       var gp = {}
@@ -200,11 +122,11 @@ export default {
     renderCodeMirrors(ref, name, gp) {
       var dom = ref
       var codemirror = CodeMirror.fromTextArea(dom, {
-        mode: 'spiderflow',	// 语法
-        theme: 'idea',	// 设置样式
+        mode: 'spiderflow', // 语法
+        theme: 'idea', // 设置样式
         placeholder: dom.getAttribute('placeholder'),
         // value: dom.getAttribute('data-value') || '',
-        scrollbarStyle: 'null'	// 隐藏滚动条
+        scrollbarStyle: 'null' // 隐藏滚动条
       })
       codemirror.setSize('auto', '28px')
       // 初始化 show-hint
@@ -246,19 +168,28 @@ export default {
 }
 </script>
 
+<style lang="less" scoped>
+@import './add-or-update.less';
+</style>
+
 <style>
-/* tab 选项卡文字大小 */
-.properties-container .el-tabs__item {
-  font-size: 12px !important;
+.toolbar-container img {
+  width: 32px;
+  height: 32px;
+  padding: 5px;
+  margin: 2px;
+  box-sizing: content-box;
 }
-.properties-container label {
-  font-weight: 400;
+/* 图表鼠标拉框样式 */
+div.mxRubberband {
+  position: absolute;
+  overflow: hidden;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #0000ff;
+  background: #0077ff;
 }
 
-.properties-container .el-table td div {
-    -webkit-box-sizing: content-box;
-    box-sizing: content-box;
-}
 .CodeMirror-hints {
   position: absolute;
   z-index: 214483647;
@@ -268,9 +199,9 @@ export default {
   margin: 0;
   padding: 2px;
 
-  -webkit-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
-  -moz-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
-  box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  -webkit-box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.2);
   border-radius: 3px;
   border: 1px solid silver;
 
@@ -296,88 +227,22 @@ li.CodeMirror-hint-active {
   color: white;
 }
 .hint-grammer {
-	width: 100%;
-	color: #333;
+  width: 100%;
+  color: #333;
 }
 .hint-grammer:not(:first-child) {
-	border-top: 1px solid #ccc;
-	margin-top: 5px;
-	padding-top: 5px;
+  border-top: 1px solid #ccc;
+  margin-top: 5px;
+  padding-top: 5px;
 }
 .hint-grammer .hint-owner span {
-	color: #600100
+  color: #600100;
 }
 .hint-grammer .hint-return span {
-	color: #0000C0
+  color: #0000c0;
 }
 .hint-grammer .hint-example {
-	padding: 2px 5px;
-	color: #000;
-}
-/* 图表鼠标拉框样式 */
-div.mxRubberband {
-	position: absolute;
-	overflow: hidden;
-	border-style: solid;
-	border-width: 1px;
-	border-color: #0000FF;
-	background: #0077FF;
-}
-.el-row {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.el-header {
-  border: solid 1px #e4e7ed;
-  background-color: #fff;
-  color: #333;
-  line-height: 40px;
-}
-
-.el-aside {
-  background-color: #F6F6F6;
-  color: #333;
-  min-width: 80px;
-  writing-mode: vertical-lr;
-}
-.el-aside img{
-  width: 32px;
-  height: 32px;
-  padding: 5px;
-  margin: 2px;
-  box-sizing: content-box;
-}
-
-.el-main {
-  /* 50 navbar，42 header toolbar，200 footer */
-  min-height: calc(100vh - 50px - 42px - 200px);
-  color: #333;
-  text-align: center;
-  line-height: 160px;
-  background-image: linear-gradient(90deg, rgba(153, 153, 153, 0.3) 1px, rgba(0, 0, 0, 0) 1px),linear-gradient(rgba(153, 153, 153, 0.3) 1px, rgba(0, 0, 0, 0) 1px);
-	background-size: 8px 8px;
-	overflow: auto;
-  padding: 0px;
-}
-
-.el-main .editor-container {
-  /* 50 navbar，42 header toolbar，200 footer */
-  min-height: calc(100vh - 50px - 42px - 200px);
-}
-
-.el-container:nth-child(5) .el-aside,
-.el-container:nth-child(6) .el-aside {
-  line-height: 260px;
-}
-
-.el-container:nth-child(7) .el-aside {
-  line-height: 320px;
-}
-
-.a-button--text {
-  font-size: 13px;
-  padding-top: 2px;
-  padding-bottom: 2px;
+  padding: 2px 5px;
+  color: #000;
 }
 </style>
