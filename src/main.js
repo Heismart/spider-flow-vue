@@ -31,7 +31,8 @@ Vue.directive('cell', {
   },
   bind: function (el, binding, vnode, oldVnode) {
     let key = binding.arg;
-    vnode.componentInstance._props.value = vnode.componentInstance.$parent.cell.data.get(key)
+    vnode.componentInstance.setValue(vnode.componentInstance.$parent.cell.data.get(key))
+    // vnode.componentInstance._props.value = vnode.componentInstance.$parent.cell.data.get(key)
   }
 })
 
