@@ -12,11 +12,14 @@ import './assets/less/index.less'
  */
 Vue.config.productionTip = false
 Vue.use(Antd)
+Vue.use(VueAxios, router)
+Vue.use(hasPermission)
+
 /**
  * @description 全局注册应用配置
  */
 Vue.prototype.$config = config
-/* eslint-disable no-new */
+
 new Vue({
   router,
   store,
