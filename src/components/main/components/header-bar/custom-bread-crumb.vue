@@ -2,7 +2,7 @@
   <div class="custom-bread-crumb">
     <a-breadcrumb>
       <a-breadcrumb-item :to="{name: homeRoute.name}" v-if="homeRoute">
-        <router-link :to="{name: homeRoute.name}" v-if="item.name != name">
+        <router-link :to="{name: homeRoute.name}">
           <i :class="homeRoute.meta.icon"></i>
           <span>{{homeRoute.name}}</span>
         </router-link>

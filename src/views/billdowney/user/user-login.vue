@@ -3,7 +3,7 @@
     <a-col>
       <a-card :padding="40" style="width:400px;">
         <h1 slot="title" style="padding:20px;text-align:center;">{{appName}}</h1>
-        <a-form :model="formParams" :rules="ruleValidate" label-position="top" ref="formParams">
+        <a-form :model="form" label-position="top">
           <a-form-item label="用户名" prop="username">
             <a-input @keyup.enter.native="handleLogin" allowClear v-model="formParams.username">
               <a-icon slot="prefix" type="user" />
@@ -20,20 +20,20 @@
             </a-input>
           </a-form-item>
         </a-form>
-        <Button
+        <a-button
           :loading="loading"
           @click="handleLogin"
-          long
-          shape="circle"
+          block
+          shape="round"
           size="large"
           type="primary"
-        >登录</Button>
+        >登录</a-button>
       </a-card>
     </a-col>
   </a-row>
 </template>
 <script>
-import { login } from '@/api/user.js'
+// import { login } from '@/api/user.js'
 
 export default {
   data() {
@@ -42,6 +42,7 @@ export default {
         username: '',
         password: ''
       },
+      form: this.$form.createForm(this),
       loading: false
     }
   },
@@ -52,20 +53,22 @@ export default {
   },
   methods: {
     handleLogin() {
-      this.$refs.formParams.validate(valid => {
-        if (valid) {
+      this.form.validateFields((err, values) => {
+        if (err) {
           this.loading = true
-          login(
-            this.formParams,
-            data => {
-              this.$store.commit('setUserInfo', data.data)
-              this.$router.push({ name: this.$config.homeRouteName })
-            },
-            data => {
-              this.$Message.error(data.msg)
-              this.loading = false
-            }
-          )
+          console.log('Received values of form: ', values)
+          return false
+          // login(
+          //   this.formParams,
+          //   data => {
+          //     this.$store.commit('setUserInfo', data.data)
+          //     this.$router.push({ name: this.$config.homeRouteName })
+          //   },
+          //   data => {
+          //     this.$Message.error(data.msg)
+          //     this.loading = false
+          //   }
+          // )
         }
       })
     }

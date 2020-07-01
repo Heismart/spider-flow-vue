@@ -1,5 +1,5 @@
 <template>
-  <Dropdown ref="dropdown" :transfer="true" :placement="placement" @on-click="goPage">
+  <a-dropdown ref="dropdown" :transfer="true" :placement="placement" @on-click="goPage">
     <a
       @click="goPage(item)"
       @mouseover="handleMousemove($event, item.children)"
@@ -8,18 +8,18 @@
     >
       <i :class="item.meta.icon" style="font-size: 20px"></i>
       <span class="menu-title" v-if="!hideTitle">{{ item.name }}</span>
-      <Icon style="float: right;" v-if="!hideTitle" type="ios-arrow-forward" :size="16"/>
+      <a-icon style="float: right;" v-if="!hideTitle" type="ios-arrow-forward" :size="16"/>
     </a>
-    <DropdownMenu ref="dropdown" slot="list">
+    <a-menu slot="overlay">
       <template v-for="child in item.children">
         <collapsed-menu v-if="child.children" :item="child" :key="`drop-${child.name}`"></collapsed-menu>
-        <DropdownItem v-else :key="`drop-${child.name}`" :name="child.name">
+        <a-menu-item v-else :key="`drop-${child.name}`" :name="child.name">
           <i :class="item.meta.icon" style="font-size: 16px"></i>
           <span class="menu-title">{{ child.name }}</span>
-        </DropdownItem>
+        </a-menu-item>
       </template>
-    </DropdownMenu>
-  </Dropdown>
+    </a-menu>
+  </a-dropdown>
 </template>
 <script>
 export default {

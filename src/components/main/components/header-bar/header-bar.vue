@@ -1,12 +1,12 @@
 <template>
   <div class="header-bar">
-    <Icon
+    <a-icon
       :class="rotateIcon"
       :style="{margin: '0 20px'}"
       @click.native="collapsedSider"
       size="24"
       type="md-menu"
-    ></Icon>
+    ></a-icon>
     <custom-bread-crumb :list="$route.matched"></custom-bread-crumb>
     <div class="header-bar-right">
       <user></user>

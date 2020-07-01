@@ -1,6 +1,6 @@
 import axios from 'axios'
 import config from '@/config'
-import ViewUI from 'view-design'
+import Antd from 'ant-design-vue'
 import {
   isDevelopment
 } from '@/util/util'
@@ -31,11 +31,11 @@ class HttpRequest {
     // http request 拦截器
     this._axios.interceptors.request.use(
       config => {
-        ViewUI.LoadingBar.start()
+        // Antd.LoadingBar.start()
         return config
       },
       error => {
-        ViewUI.LoadingBar.error()
+        // Antd.LoadingBar.error()
         console.error(error)
         return error
       })
@@ -43,15 +43,15 @@ class HttpRequest {
     // http response 拦截器
     this._axios.interceptors.response.use(
       response => {
-        ViewUI.LoadingBar.finish()
+        // Antd.LoadingBar.finish()
         return response
       },
       error => {
-        ViewUI.LoadingBar.error()
+        // Antd.LoadingBar.error()
         if (error.message === 'Network Error') {
-          ViewUI.Message.error(this._requestConfig.networkErrorMsg)
+          Antd.Message.error(this._requestConfig.networkErrorMsg)
         } else if (error.message.indexOf('timeout of') !== -1) {
-          ViewUI.Message.error(this._requestConfig.timeoutMsg)
+          Antd.Message.error(this._requestConfig.timeoutMsg)
         }
         throw error // 返回接口返回的错误信息
       })
@@ -73,7 +73,7 @@ class HttpRequest {
         } else if (typeof errorCallback === 'function') {
           errorCallback(response.data, response)
         } else if (this._requestConfig.msgTipField && response.data[this._requestConfig.msgTipField]) {
-          ViewUI.Message.error(response.data[this._requestConfig.msgTipField])
+          Antd.Message.error(response.data[this._requestConfig.msgTipField])
         }
       }
     }

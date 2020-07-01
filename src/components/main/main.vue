@@ -2,7 +2,6 @@
   <a-layout class="main">
     <a-layout-sider
       class="side-menu"
-      collapsible
       ref="mainSider"
       v-model="isCollapsed"
     >

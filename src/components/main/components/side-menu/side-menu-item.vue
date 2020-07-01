@@ -3,10 +3,10 @@
     <template v-for="item1 in menuList">
       <template v-if="item1.meta.hideInMenu != 1">
         <!-- 子菜单大于1 -->
-        <Submenu
-          v-if="item1.children && item1.children.length > 1"
-          :name="item1.name"
+        <a-menu
           :key="'side-menu-item' + item1.name"
+          :name="item1.name"
+          v-if="item1.children && item1.children.length > 1"
         >
           <template slot="title">
             <div>
@@ -15,32 +15,23 @@
             </div>
           </template>
           <side-menu-item :menu-list="item1.children"></side-menu-item>
-        </Submenu>
+        </a-menu>
         <!-- 子菜单等于1 -->
         <side-menu-item
-          v-else-if="item1.children && item1.children.length === 1"
           :key="'side-menu-item' + item1.name"
           :menu-list="[item1.children[0]]"
-        ></side-menu-item>
-        <!-- <MenuItem
           v-else-if="item1.children && item1.children.length === 1"
-          :name="item1.children[0].name"
-          :key="item1.children[0].name"
-          :to="{name:item1.children[0].name}"
-        >
-          <i :class="item1.children[0].meta.icon"></i>
-          <span class="item-title">{{item1.children[0].name}}</span>
-        </MenuItem>-->
+        ></side-menu-item>
         <!-- 不存在子菜单 -->
-        <MenuItem
-          v-else
-          :name="item1.name"
+        <a-menu-item
           :key="'side-menu-item' + item1.name"
+          :name="item1.name"
           :to="{name:item1.name}"
+          v-else
         >
           <i :class="item1.meta.icon"></i>
           <span class="item-title">{{item1.name}}</span>
-        </MenuItem>
+        </a-menu-item>
       </template>
     </template>
   </div>
