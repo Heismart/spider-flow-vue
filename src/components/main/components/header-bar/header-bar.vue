@@ -1,13 +1,16 @@
 <template>
   <div class="header-bar">
-    <a-icon
-      :class="rotateIcon"
-      :style="{margin: '0 20px'}"
-      @click.native="collapsedSider"
-      size="24"
-      type="md-menu"
-    ></a-icon>
-    <custom-bread-crumb :list="$route.matched"></custom-bread-crumb>
+    <div class="header-bar-left">
+      <a-icon
+        :style="{margin: '0 20px'}"
+        :type="rotateIcon"
+        @click.native="collapsedSider"
+        size="24"
+      ></a-icon>
+    </div>
+    <div class="header-bar-left">
+      <custom-bread-crumb :list="$route.matched"></custom-bread-crumb>
+    </div>
     <div class="header-bar-right">
       <user></user>
     </div>
@@ -27,7 +30,7 @@ export default {
   },
   computed: {
     rotateIcon() {
-      return ['menu-icon', this.isCollapsed ? 'rotate-icon' : '']
+      return this.isCollapsed ? 'menu-unfold' : 'menu-fold'
     }
   },
   methods: {
@@ -43,6 +46,10 @@ export default {
     width: 100%;
     height: 100%;
     position: relative;
+    padding-right: 10px;
+  }
+  .header-bar-left {
+    display: inline-flex;
   }
   .header-bar-right {
     float: right;
@@ -50,12 +57,6 @@ export default {
     & > * {
       float: right;
     }
-  }
-  .menu-icon {
-    transition: all 0.3s;
-  }
-  .rotate-icon {
-    transform: rotate(-90deg);
   }
 }
 </style>

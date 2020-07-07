@@ -1,10 +1,6 @@
 <template>
   <a-layout class="main">
-    <a-layout-sider
-      class="side-menu"
-      ref="mainSider"
-      v-model="isCollapsed"
-    >
+    <a-layout-sider class="side-menu" ref="mainSider" v-model="isCollapsed">
       <side-menu :active-name="$route.name" :is-collapsed="isCollapsed" :menu-list="menuList"></side-menu>
     </a-layout-sider>
     <a-layout>
@@ -18,7 +14,6 @@
   </a-layout>
 </template>
 <script>
-import './main.less'
 import SideMenu from './components/side-menu'
 import HeaderBar from './components/header-bar'
 
@@ -42,8 +37,34 @@ export default {
   methods: {
     // 展开侧边栏
     collapsedSider() {
-      this.$refs.mainSider.toggleCollapse()
+      this.isCollapsed = !this.isCollapsed
     }
   }
 }
 </script>
+
+<style lang="less">
+.main {
+  height: 100%;
+
+  .side-menu {
+    user-select: none;
+    overflow: hidden;
+    width: 200px;
+  }
+
+  .header-con {
+    background: #fff;
+    padding: 0;
+  }
+
+  .main-content {
+    height: 100%;
+    overflow-y: auto;
+
+    & > * {
+      height: 100%;
+    }
+  }
+}
+</style>

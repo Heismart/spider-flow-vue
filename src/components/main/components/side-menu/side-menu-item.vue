@@ -1,9 +1,9 @@
 <template>
-  <div class="side-menu-item">
+  <span class="side-menu-item">
     <template v-for="item1 in menuList">
       <template v-if="item1.meta.hideInMenu != 1">
         <!-- 子菜单大于1 -->
-        <a-menu
+        <a-sub-menu
           :key="'side-menu-item' + item1.name"
           :name="item1.name"
           v-if="item1.children && item1.children.length > 1"
@@ -11,11 +11,11 @@
           <template slot="title">
             <div>
               <i :class="item1.meta.icon"></i>
-              <span class="item-title">{{item1.name}}</span>
+              <span class="item-title">{{item1.meta.title}}</span>
             </div>
           </template>
           <side-menu-item :menu-list="item1.children"></side-menu-item>
-        </a-menu>
+        </a-sub-menu>
         <!-- 子菜单等于1 -->
         <side-menu-item
           :key="'side-menu-item' + item1.name"
@@ -30,11 +30,11 @@
           v-else
         >
           <i :class="item1.meta.icon"></i>
-          <span class="item-title">{{item1.name}}</span>
+          <span class="item-title">{{item1.meta.title}}</span>
         </a-menu-item>
       </template>
     </template>
-  </div>
+  </span>
 </template>
 <script>
 export default {

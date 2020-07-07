@@ -1,16 +1,16 @@
 <template>
   <div class="custom-bread-crumb">
     <a-breadcrumb>
-      <a-breadcrumb-item :to="{name: homeRoute.name}" v-if="homeRoute">
+      <a-breadcrumb-item v-if="homeRoute">
         <router-link :to="{name: homeRoute.name}">
           <i :class="homeRoute.meta.icon"></i>
-          <span>{{homeRoute.name}}</span>
+          <span>{{homeRoute.meta.title}}</span>
         </router-link>
       </a-breadcrumb-item>
       <a-breadcrumb-item :key="`bread-crumb-${item.name}`" v-for="item in breadCrumbList">
         <router-link :to="item.component||item.redirect||item.render?{name: item.name}:undefined">
           <i :class="item.meta.icon"></i>
-          <span>{{item.name}}</span>
+          <span>{{item.meta.title}}</span>
         </router-link>
       </a-breadcrumb-item>
     </a-breadcrumb>

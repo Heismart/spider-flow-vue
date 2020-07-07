@@ -1,5 +1,5 @@
 <template>
-  <a-row align="middle" class-name="user-login" justify="center" type="flex">
+  <a-row align="middle" class="user-login" justify="center" type="flex">
     <a-col>
       <a-card :padding="40" style="width:400px;">
         <h1 slot="title" style="padding:20px;text-align:center;">{{appName}}</h1>

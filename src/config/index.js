@@ -6,7 +6,7 @@ export default {
   /**
    * @description 系统名称
    */
-  appName: '后台管理系统',
+  appName: 'spider-flow',
   /**
    * @description 默认跳转页面，name跳转
    */

@@ -1,18 +1,11 @@
 <template>
   <a-layout class="side-menu-wrapper">
     <a-layout-header class="header">
-      <h1 v-show="!isCollapsed">{{appName}}</h1>
+      <h1>{{appName}}</h1>
     </a-layout-header>
     <a-layout-content class="content">
       <!-- 组装菜单 -->
-      <a-menu
-        :active-name="activeName"
-        :open-names="openNames"
-        accordion
-        theme="dark"
-        v-show="!isCollapsed"
-        width="auto"
-      >
+      <a-menu mode="inline" v-show="!isCollapsed">
         <side-menu-item :menu-list="menuList"></side-menu-item>
       </a-menu>
       <div class="side-menu-collapsed" v-show="isCollapsed">
@@ -91,7 +84,9 @@ export default {
       return openNames
     }
   },
-  methods: {}
+  mounted() {
+    console.log(this.menuList)
+  }
 }
 </script>
 <style lang="less">
