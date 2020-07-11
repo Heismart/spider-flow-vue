@@ -62,4 +62,23 @@ export default [{
       login: 1
     }
   }]
+}, {
+  path: '/_variables_list',
+  name: '_variables_list',
+  component: () => import('@/components/main'),
+  meta: {
+    title: '_全局变量',
+    icon: 'database',
+    hideInBread: 1
+  },
+  children: [{
+    path: '/variables_list',
+    name: 'variables_list',
+    component: () => import('@/views/variables/list.vue'),
+    meta: {
+      title: '全局变量',
+      icon: 'database',
+      login: 1
+    }
+  }]
 }]

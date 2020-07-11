@@ -5,7 +5,6 @@
     :selectedKeys="selectedKeys"
     class="side-menu-item"
     mode="inline"
-    theme="dark"
   >
     <template v-for="item in menuList">
       <template v-if="item.meta.hideInMenu != 1">

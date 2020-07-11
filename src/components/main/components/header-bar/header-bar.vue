@@ -47,6 +47,8 @@ export default {
     height: 100%;
     position: relative;
     padding-right: 10px;
+    background-color: #1890ff;
+    color: #ffffff;
   }
   .header-bar-left {
     display: inline-flex;

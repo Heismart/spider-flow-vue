@@ -8,7 +8,9 @@
         <header-bar :is-collapsed="isCollapsed" @on-collapsed-sider="collapsedSider"></header-bar>
       </a-layout-header>
       <a-layout-content class="main-content">
-        <router-view />
+        <div style="padding:5px;">
+          <router-view />
+        </div>
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -51,6 +53,7 @@ export default {
     user-select: none;
     overflow: hidden;
     width: 200px;
+    background: #fff;
   }
 
   .header-con {

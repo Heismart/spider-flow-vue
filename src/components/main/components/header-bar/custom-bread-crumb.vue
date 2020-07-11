@@ -46,5 +46,9 @@ export default {
 .custom-bread-crumb {
   display: inline-block;
   vertical-align: top;
+
+  span {
+    color: #ffffff;
+  }
 }
 </style>

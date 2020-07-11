@@ -27,7 +27,7 @@ export default {
     suffix: '',
     // 成功匹配表达式
     successConditions: {
-      field: 'code',
+      field: '',
       value: 10000
     },
     // 信息提示字段
