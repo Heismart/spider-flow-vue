@@ -1,40 +1,58 @@
 <template>
-  <span class="side-menu-item">
-    <template v-for="item1 in menuList">
-      <template v-if="item1.meta.hideInMenu != 1">
+  <a-menu
+    :inline-collapsed="isCollapsed"
+    :openKeys="openKeys"
+    :selectedKeys="selectedKeys"
+    class="side-menu-item"
+    mode="inline"
+    theme="dark"
+  >
+    <template v-for="item in menuList">
+      <template v-if="item.meta.hideInMenu != 1">
         <!-- 子菜单大于1 -->
         <a-sub-menu
-          :key="'side-menu-item' + item1.name"
-          :name="item1.name"
-          v-if="item1.children && item1.children.length > 1"
+          :key="itemKeyName+item.name"
+          :name="item.name"
+          @titleClick="handleTitleClick"
+          v-if="item.children && item.children.length > 1"
         >
           <template slot="title">
-            <div>
-              <i :class="item1.meta.icon"></i>
-              <span class="item-title">{{item1.meta.title}}</span>
-            </div>
+            <router-link :to="{name: item.name}">
+              <a-icon :type="item.meta.icon"></a-icon>
+              <span class="item-title">{{item.meta.title}}</span>
+            </router-link>
           </template>
-          <side-menu-item :menu-list="item1.children"></side-menu-item>
+          <template v-for="item1 in item.children">
+            <a-menu-item :key="itemKeyName+item1.name" :name="item1.name" :to="{name:item1.name}">
+              <router-link :to="{name: item1.name}">
+                <a-icon :type="item.meta.icon"></a-icon>
+                <span class="item-title">{{item1.meta.title}}</span>
+              </router-link>
+            </a-menu-item>
+          </template>
         </a-sub-menu>
         <!-- 子菜单等于1 -->
-        <side-menu-item
-          :key="'side-menu-item' + item1.name"
-          :menu-list="[item1.children[0]]"
-          v-else-if="item1.children && item1.children.length === 1"
-        ></side-menu-item>
-        <!-- 不存在子菜单 -->
         <a-menu-item
-          :key="'side-menu-item' + item1.name"
-          :name="item1.name"
-          :to="{name:item1.name}"
-          v-else
+          :key="itemKeyName+item.children[0].name"
+          :name="item.children[0].name"
+          :to="{name:item.children[0].name}"
+          v-else-if="item.children && item.children.length === 1"
         >
-          <i :class="item1.meta.icon"></i>
-          <span class="item-title">{{item1.meta.title}}</span>
+          <router-link :to="{name: item.children[0].name}">
+            <a-icon :type="item.children[0].meta.icon"></a-icon>
+            <span class="item-title">{{item.children[0].meta.title}}</span>
+          </router-link>
+        </a-menu-item>
+        <!-- 不存在子菜单 -->
+        <a-menu-item :key="itemKeyName+item.name" :name="item.name" :to="{name:item.name}" v-else>
+          <router-link :to="{name: item.name}">
+            <a-icon :type="item.meta.icon"></a-icon>
+            <span class="item-title">{{item.meta.title}}</span>
+          </router-link>
         </a-menu-item>
       </template>
     </template>
-  </span>
+  </a-menu>
 </template>
 <script>
 export default {
@@ -45,7 +63,66 @@ export default {
       default() {
         return []
       }
+    },
+    isCollapsed: {
+      type: Boolean,
+      default: false
     }
+  },
+  data() {
+    return {
+      selectedKeys: [],
+      openKeys: [],
+      itemKeyName: 'a-menu-'
+    }
+  },
+  watch: {
+    $route: {
+      handler: function(val, oldVal) {
+        this.selectedKeys = []
+        if (val.meta.hideInMenu !== 1) {
+          this.selectedKeys.push(this.itemKeyName + val.name)
+        }
+      },
+      // 深度观察监听
+      deep: true
+    }
+  },
+  methods: {
+    addOpenKeys() {
+      this.openKeys = []
+      this.selectedKeys.forEach(item => {
+        this.openKeys = this.searchChildKey(
+          this.menuList,
+          item.replace(this.itemKeyName, '')
+        )
+      })
+    },
+    searchChildKey(list, name) {
+      let keys = []
+      list.forEach(item => {
+        if (item.children && item.children.length > 1) {
+          keys = this.searchChildKey(item.children, name)
+          if (keys.length > 0) {
+            keys.push(this.itemKeyName + item.name)
+          }
+        } else if (item.name === name) {
+          keys.push(this.itemKeyName + item.name)
+        }
+      })
+      return keys
+    },
+    handleTitleClick(item, key, keyPath) {
+      if (this.openKeys.indexOf(item.key) === -1) {
+        this.openKeys.push(item.key)
+      } else {
+        this.openKeys = this.openKeys.filter(item1 => item.key !== item1)
+      }
+    }
+  },
+  mounted() {
+    this.selectedKeys.push(this.itemKeyName + this.$route.name)
+    this.addOpenKeys()
   }
 }
 </script>
@@ -62,7 +139,6 @@ export default {
       text-overflow: ellipsis;
       white-space: nowrap;
       display: inline-block;
-      width: 85%;
       vertical-align: middle;
     }
   }

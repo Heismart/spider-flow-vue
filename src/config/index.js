@@ -10,7 +10,7 @@ export default {
   /**
    * @description 默认跳转页面，name跳转
    */
-  defaultGoPage: 'user_login',
+  defaultGoPage: 'home',
   /**
    * @description 首页配置的名称
    */
@@ -39,8 +39,8 @@ export default {
     // 默认网络配置
     defaultConfig: {
       // 请求路径，dev:开发环境
-      baseURL: 'https://www.billdowney.cn/',
-      devBaseURL: 'http://127.0.0.1/',
+      baseURL: '',
+      devBaseURL: '',
       // 默认请求方法
       method: 'post',
       // 请求超时时间（毫秒）

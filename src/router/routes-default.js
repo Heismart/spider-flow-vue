@@ -31,5 +31,5 @@ export default [{
     desc: '404错误页面',
     hideInMenu: 1
   },
-  component: () => import('@/views/billdowney/error/404.vue')
+  component: () => import('@/views/error/404.vue')
 }]

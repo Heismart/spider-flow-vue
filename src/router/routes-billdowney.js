@@ -19,16 +19,17 @@ export default [{
   component: () => import('@/components/main'),
   meta: {
     title: '_首页',
-    icon: 'ivu-icon ivu-icon-md-home',
-    hideInBread: 1
+    icon: 'home',
+    hideInBread: 1,
+    hideInMenu: 1
   },
   children: [{
     path: '/home',
     name: 'home',
-    component: () => import('@/views/billdowney/home/home.vue'),
+    component: () => import('@/views/home/home.vue'),
     meta: {
       title: '首页',
-      icon: 'ivu-icon ivu-icon-md-home',
+      icon: 'home',
       hideInBread: 1,
       login: 1
     }
@@ -36,28 +37,28 @@ export default [{
 }, {
   path: '/user_login',
   name: 'user_login',
-  component: () => import('@/views/billdowney/user/user-login.vue'),
+  component: () => import('@/views/user/user-login.vue'),
   meta: {
     title: '用户登录',
-    icon: 'ivu-icon ivu-icon-md-person',
     hideInBread: 1,
     hideInMenu: 1
   }
 }, {
-  path: '/user_manage',
-  name: 'user_manage',
+  path: '/_spider_list',
+  name: '_spider_list',
   component: () => import('@/components/main'),
   meta: {
-    title: '用户管理',
-    icon: 'ivu-icon ivu-icon-md-person'
+    title: '_爬虫列表',
+    icon: 'container',
+    hideInBread: 1
   },
   children: [{
-    path: '/user_list',
-    name: 'user_list',
-    component: () => import('@/views/billdowney/user/user-list.vue'),
+    path: '/spider_list',
+    name: 'spider_list',
+    component: () => import('@/views/spider/list.vue'),
     meta: {
-      title: '用户列表',
-      icon: 'ivu-icon ivu-icon-md-person',
+      title: '爬虫列表',
+      icon: 'container',
       login: 1
     }
   }]

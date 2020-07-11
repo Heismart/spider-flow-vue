@@ -79,6 +79,6 @@ export default {
 .user-login {
   height: 100%;
   width: 100%;
-  background: url('../../../assets/images/email-pattern.png');
+  background: url('../../assets/images/email-pattern.png');
 }
 </style>

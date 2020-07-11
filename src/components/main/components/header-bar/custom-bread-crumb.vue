@@ -8,7 +8,7 @@
         </router-link>
       </a-breadcrumb-item>
       <a-breadcrumb-item :key="`bread-crumb-${item.name}`" v-for="item in breadCrumbList">
-        <router-link :to="item.component||item.redirect||item.render?{name: item.name}:undefined">
+        <router-link :to="{name: item.name}">
           <i :class="item.meta.icon"></i>
           <span>{{item.meta.title}}</span>
         </router-link>
