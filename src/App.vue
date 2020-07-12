@@ -1,22 +1,33 @@
 <template>
   <div id="app">
-    <router-view />
+    <a-config-provider :locale="zhCN">
+      <router-view />
+    </a-config-provider>
+
   </div>
 </template>
 
 <script>
 import { mapMutations } from 'vuex'
-import {
-  isDevelopment
-} from '@/util/util.js'
+import { isDevelopment } from '@/util/util.js'
+import zhCN from 'ant-design-vue/es/locale-provider/zh_CN'
 export default {
   name: 'App',
+  data() {
+    return {
+      zhCN
+    }
+  },
   methods: {
     ...mapMutations(['setRoutesConfig']),
     loadDefaultRoutes() {
       let loadRoutes = this.$config.loadRoutes || []
       // 加入开发者配置路由
-      if (isDevelopment() && this.$config.development.loadRoutes.length && this.$config.development.loadRoutes.length > 0) {
+      if (
+        isDevelopment() &&
+        this.$config.development.loadRoutes.length &&
+        this.$config.development.loadRoutes.length > 0
+      ) {
         loadRoutes = loadRoutes.concat(this.$config.development.loadRoutes)
       }
       loadRoutes.forEach(element => {

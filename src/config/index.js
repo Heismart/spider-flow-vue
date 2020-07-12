@@ -31,7 +31,7 @@ export default {
       value: 10000
     },
     // 信息提示字段
-    msgTipField: 'msg',
+    msgTipField: 'message',
     // 连接超时提示信息
     timeoutMsg: '网络连接超时',
     // 网络错误提示信息

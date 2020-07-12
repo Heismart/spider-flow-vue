@@ -1,6 +1,8 @@
 import axios from 'axios'
 import config from '@/config'
-import Antd from 'ant-design-vue'
+import {
+  message
+} from 'ant-design-vue'
 import {
   isDevelopment
 } from '@/util/util'
@@ -31,11 +33,11 @@ class HttpRequest {
     // http request 拦截器
     this._axios.interceptors.request.use(
       config => {
-        // Antd.LoadingBar.start()
+        // LoadingBar.start()
         return config
       },
       error => {
-        // Antd.LoadingBar.error()
+        // LoadingBar.error()
         console.error(error)
         return error
       })
@@ -43,15 +45,15 @@ class HttpRequest {
     // http response 拦截器
     this._axios.interceptors.response.use(
       response => {
-        // Antd.LoadingBar.finish()
+        // LoadingBar.finish()
         return response
       },
       error => {
-        // Antd.LoadingBar.error()
+        // LoadingBar.error()
         if (error.message === 'Network Error') {
-          Antd.Message.error(this._requestConfig.networkErrorMsg)
+          message.error(this._requestConfig.networkErrorMsg)
         } else if (error.message.indexOf('timeout of') !== -1) {
-          Antd.Message.error(this._requestConfig.timeoutMsg)
+          message.error(this._requestConfig.timeoutMsg)
         }
         throw error // 返回接口返回的错误信息
       })
@@ -73,7 +75,7 @@ class HttpRequest {
         } else if (typeof errorCallback === 'function') {
           errorCallback(response.data, response)
         } else if (this._requestConfig.msgTipField && response.data[this._requestConfig.msgTipField]) {
-          Antd.Message.error(response.data[this._requestConfig.msgTipField])
+          message.error(response.data[this._requestConfig.msgTipField])
         }
       }
     }
@@ -83,13 +85,12 @@ class HttpRequest {
   _errorCallbackFun(error, errorCallback) {
     console.error(error)
     if (typeof errorCallback === 'function') {
-      if (this._requestConfig.msgTipField) {
-        let data = {}
-        data[this._requestConfig.msgTipField] = error.message
-        errorCallback(data, error.response, error)
+      if (this._requestConfig.msgTipField && error.response.data[this._requestConfig.msgTipField]) {
+        message.error(error.response.data[this._requestConfig.msgTipField])
       } else {
-        errorCallback(error.message, error.response, error)
+        message.error(error.message)
       }
+      errorCallback(error.response.data, error.response, error)
     }
   }
 
