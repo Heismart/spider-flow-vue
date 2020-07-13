@@ -68,7 +68,7 @@ export default [{
   component: () => import('@/components/main'),
   meta: {
     title: '_全局变量',
-    icon: 'database',
+    icon: 'tablet',
     hideInBread: 1
   },
   children: [{
@@ -77,6 +77,25 @@ export default [{
     component: () => import('@/views/variables/list.vue'),
     meta: {
       title: '全局变量',
+      icon: 'tablet',
+      login: 1
+    }
+  }]
+}, {
+  path: '/_datasources_list',
+  name: '_datasources_list',
+  component: () => import('@/components/main'),
+  meta: {
+    title: '_数据源管理',
+    icon: 'database',
+    hideInBread: 1
+  },
+  children: [{
+    path: '/datasources_list',
+    name: 'datasources_list',
+    component: () => import('@/views/datasources/list.vue'),
+    meta: {
+      title: '数据源管理',
       icon: 'database',
       login: 1
     }
