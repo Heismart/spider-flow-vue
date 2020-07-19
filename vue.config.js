@@ -13,6 +13,9 @@ const resolve = dir => {
 // 需要将它改为'/my-app/'
 const BASE_URL = process.env.NODE_ENV === 'production' ? '/' : '/'
 
+// monaco插件
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+
 module.exports = {
   // Project deployment base
   // By default we assume your app will be deployed at the root of a domain,
@@ -49,5 +52,10 @@ module.exports = {
         changeOrigin: true
       },
     }
+  },
+  configureWebpack: {
+    plugins: [
+      new MonacoWebpackPlugin()
+    ]
   }
 }

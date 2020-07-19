@@ -6,50 +6,48 @@
     class="side-menu-item"
     mode="inline"
   >
-    <template v-for="item in menuList">
-      <template v-if="item.meta.hideInMenu != 1">
-        <!-- 子菜单大于1 -->
-        <a-sub-menu
-          :key="itemKeyName+item.name"
-          :name="item.name"
-          @titleClick="handleTitleClick"
-          v-if="item.children && item.children.length > 1"
-        >
-          <template slot="title">
-            <router-link :to="{name: item.name}">
-              <a-icon :type="item.meta.icon"></a-icon>
-              <span class="item-title">{{item.meta.title}}</span>
-            </router-link>
-          </template>
-          <template v-for="item1 in item.children">
-            <a-menu-item :key="itemKeyName+item1.name" :name="item1.name" :to="{name:item1.name}">
-              <router-link :to="{name: item1.name}">
-                <a-icon :type="item.meta.icon"></a-icon>
-                <span class="item-title">{{item1.meta.title}}</span>
-              </router-link>
-            </a-menu-item>
-          </template>
-        </a-sub-menu>
-        <!-- 子菜单等于1 -->
-        <a-menu-item
-          :key="itemKeyName+item.children[0].name"
-          :name="item.children[0].name"
-          :to="{name:item.children[0].name}"
-          v-else-if="item.children && item.children.length === 1"
-        >
-          <router-link :to="{name: item.children[0].name}">
-            <a-icon :type="item.children[0].meta.icon"></a-icon>
-            <span class="item-title">{{item.children[0].meta.title}}</span>
-          </router-link>
-        </a-menu-item>
-        <!-- 不存在子菜单 -->
-        <a-menu-item :key="itemKeyName+item.name" :name="item.name" :to="{name:item.name}" v-else>
+    <template v-for="item in filterMenuList">
+      <!-- 子菜单大于1 -->
+      <a-sub-menu
+        :key="itemKeyName+item.name"
+        :name="item.name"
+        @titleClick="handleTitleClick"
+        v-if="item.children && item.children.length > 1"
+      >
+        <template slot="title">
           <router-link :to="{name: item.name}">
             <a-icon :type="item.meta.icon"></a-icon>
             <span class="item-title">{{item.meta.title}}</span>
           </router-link>
-        </a-menu-item>
-      </template>
+        </template>
+        <template v-for="item1 in item.children">
+          <a-menu-item :key="itemKeyName+item1.name" :name="item1.name" :to="{name:item1.name}">
+            <router-link :to="{name: item1.name}">
+              <a-icon :type="item1.meta.icon"></a-icon>
+              <span class="item-title">{{item1.meta.title}}</span>
+            </router-link>
+          </a-menu-item>
+        </template>
+      </a-sub-menu>
+      <!-- 子菜单等于1 -->
+      <a-menu-item
+        :key="itemKeyName+item.children[0].name"
+        :name="item.children[0].name"
+        :to="{name:item.children[0].name}"
+        v-else-if="item.children && item.children.length === 1"
+      >
+        <router-link :to="{name: item.children[0].name}">
+          <a-icon :type="item.children[0].meta.icon"></a-icon>
+          <span class="item-title">{{item.children[0].meta.title}}</span>
+        </router-link>
+      </a-menu-item>
+      <!-- 不存在子菜单 -->
+      <a-menu-item :key="itemKeyName+item.name" :name="item.name" :to="{name:item.name}" v-else>
+        <router-link :to="{name: item.name}">
+          <a-icon :type="item.meta.icon"></a-icon>
+          <span class="item-title">{{item.meta.title}}</span>
+        </router-link>
+      </a-menu-item>
     </template>
   </a-menu>
 </template>
@@ -66,6 +64,19 @@ export default {
     isCollapsed: {
       type: Boolean,
       default: false
+    }
+  },
+  computed: {
+    filterMenuList() {
+      function filterFun(list) {
+        list.forEach(item => {
+          if (item.children && item.children.length > 0) {
+            item.children = filterFun(item.children)
+          }
+        })
+        return list.filter(item => item.meta.hideInMenu !== 1)
+      }
+      return filterFun(this.menuList)
     }
   },
   data() {

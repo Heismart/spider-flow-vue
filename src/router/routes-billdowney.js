@@ -82,6 +82,35 @@ export default [{
     }
   }]
 }, {
+  path: '/_functions_list',
+  name: '_functions_list',
+  component: () => import('@/components/main'),
+  meta: {
+    title: '_自定义函数',
+    icon: 'play-square',
+    hideInBread: 1
+  },
+  children: [{
+    path: '/functions_list',
+    name: 'functions_list',
+    component: () => import('@/views/functions/list.vue'),
+    meta: {
+      title: '自定义函数',
+      icon: 'play-square',
+      login: 1
+    }
+  }, {
+    path: '/functions_detail/:id',
+    name: 'functions_detail',
+    component: () => import('@/views/functions/detail.vue'),
+    meta: {
+      title: '自定义函数详情页',
+      login: 1,
+      icon: 'database',
+      hideInMenu: 1
+    }
+  }]
+}, {
   path: '/_datasources_list',
   name: '_datasources_list',
   component: () => import('@/components/main'),
