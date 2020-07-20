@@ -8,7 +8,7 @@
         <header-bar :is-collapsed="isCollapsed" @on-collapsed-sider="collapsedSider"></header-bar>
       </a-layout-header>
       <a-layout-content class="main-content">
-        <div style="padding:5px;">
+        <div style="padding:5px;height:100%;">
           <router-view />
         </div>
       </a-layout-content>

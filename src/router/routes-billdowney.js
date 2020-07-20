@@ -129,4 +129,23 @@ export default [{
       login: 1
     }
   }]
+}, {
+  path: '/_scripts',
+  name: '_scripts',
+  component: () => import('@/components/main'),
+  meta: {
+    title: '_脚本管理',
+    icon: 'laptop',
+    hideInBread: 1
+  },
+  children: [{
+    path: '/scripts',
+    name: 'scripts',
+    component: () => import('@/views/scripts/index.vue'),
+    meta: {
+      title: '脚本管理',
+      icon: 'laptop',
+      login: 1
+    }
+  }]
 }]
