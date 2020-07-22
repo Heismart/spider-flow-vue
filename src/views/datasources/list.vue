@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { listAction, deleteAction } from '@/api/datasources.js'
+import { listRequest, deleteRequest } from '@/api/datasources.js'
 import detailModel from './detail'
 
 export default {
@@ -91,14 +91,14 @@ export default {
   },
   methods: {
     listAction() {
-      listAction(this.queryParam, data => {
+      listRequest(this.queryParam, data => {
         this.data = data
         this.pagination.total = this.data.total
         this.pagination.pageSize = this.data.size
       })
     },
     deleteAction(id) {
-      deleteAction(
+      deleteRequest(
         id,
         data => {
           this.$message.success(data.message)

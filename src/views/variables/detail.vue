@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { detailAction, saveAction } from '@/api/variables.js'
+import { detailRequest, saveRequest } from '@/api/variables.js'
 export default {
   name: 'detailModel',
   data() {
@@ -97,7 +97,7 @@ export default {
         if (!err) {
           this.confirmLoading = true
           Object.assign(this.detail, detail)
-          saveAction(
+          saveRequest(
             this.detail,
             data => {
               this.$message.success(data.message)
@@ -109,7 +109,7 @@ export default {
       })
     },
     detailAction() {
-      detailAction(this.detail.id, data => {
+      detailRequest(this.detail.id, data => {
         this.detail = data.data
       })
     }

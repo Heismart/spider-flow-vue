@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { detailAction, saveAction } from '@/api/functions.js'
+import { detailRequest, saveRequest } from '@/api/functions.js'
 import CodeEditor from '@/components/code-editor'
 
 export default {
@@ -90,7 +90,7 @@ export default {
         if (!err) {
           this.confirmLoading = true
           Object.assign(this.detail, detail)
-          saveAction(
+          saveRequest(
             this.detail,
             data => {
               this.$message.success('成功')
@@ -102,7 +102,7 @@ export default {
       })
     },
     detailAction() {
-      detailAction(this.detail.id, data => {
+      detailRequest(this.detail.id, data => {
         this.detail = data
         this.$refs.editor.setValue(data.script)
       })

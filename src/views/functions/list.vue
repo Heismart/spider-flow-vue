@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { listAction, deleteAction } from '@/api/functions.js'
+import { listRequest, deleteRequest } from '@/api/functions.js'
 
 export default {
   data() {
@@ -94,14 +94,14 @@ export default {
         this.queryParam.page = page
         this.pagination.current = page
       }
-      listAction(this.queryParam, data => {
+      listRequest(this.queryParam, data => {
         this.data = data
         this.pagination.total = this.data.total
         this.pagination.pageSize = this.data.size
       })
     },
     deleteAction(id) {
-      deleteAction(
+      deleteRequest(
         id,
         data => {
           this.$message.success('成功')

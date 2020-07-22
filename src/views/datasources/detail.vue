@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import { detailAction, saveAction, testAction } from '@/api/datasources.js'
+import { detailRequest, saveRequest, testRequest } from '@/api/datasources.js'
 export default {
   name: 'detailModel',
   data() {
@@ -135,7 +135,7 @@ export default {
         if (!err) {
           this.confirmLoading = true
           Object.assign(this.detail, detail)
-          saveAction(
+          saveRequest(
             this.detail,
             data => {
               this.$message.success('成功')
@@ -147,7 +147,7 @@ export default {
       })
     },
     detailAction() {
-      detailAction(this.detail.id, data => {
+      detailRequest(this.detail.id, data => {
         this.detail = data
       })
     },
@@ -156,7 +156,7 @@ export default {
         if (!err) {
           this.testLoading = true
           Object.assign(this.detail, detail)
-          testAction(
+          testRequest(
             this.detail,
             data => {
               this.$notification.info({
