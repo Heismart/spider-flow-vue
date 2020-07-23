@@ -29,3 +29,15 @@ export const renameFileRequest = (params, succFun, errFun) => {
 export const createFileRequest = (params, succFun, errFun) => {
   request.send(suffix + 'create/file', params, succFun, errFun)
 }
+// 获取文件内容
+export const readRequest = (params, succFun, errFun) => {
+  request.send(suffix + 'read', params, succFun, errFun)
+}
+// 保存文件内容
+export const saveRequest = (params, succFun, errFun) => {
+  request.send(suffix + 'save', params, succFun, errFun)
+}
+// 测试脚本
+export const testRequest = (params, succFun, errFun) => {
+  request.send(suffix + 'test', params, succFun, errFun)
+}
