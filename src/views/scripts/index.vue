@@ -33,12 +33,19 @@
         <a-layout-header class="btns-group">
           <a-form layout="inline">
             <a-form-item>
-              <a-button type="primary" v-show="isSelectFile() === false">新建脚本</a-button>
+              <a-button
+                type="primary"
+                v-show="isSelectFile() === false"
+                @click="openModal('请输入脚本名称','','createAction')"
+              >新建脚本</a-button>
               <a-dropdown :trigger="['click']" v-show="isSelectFile()">
                 <a-menu @click="handleMenuClick" slot="overlay">
                   <a-menu-item key="newFile" v-show="currentFile.directory">新建文件</a-menu-item>
                   <a-menu-item key="newFolder" v-show="currentFile.directory">新建文件夹</a-menu-item>
-                  <a-menu-item key="rename">重命名</a-menu-item>
+                  <a-menu-item
+                    key="rename"
+                    v-show="treeData.length > 0 && treeData[0].key !== selectedKeys[0]"
+                  >重命名</a-menu-item>
                   <a-menu-item key="delete">删除</a-menu-item>
                 </a-menu>
                 <a-button type="primary">
@@ -58,8 +65,8 @@
             </a-form-item>
           </a-form>
         </a-layout-header>
-        <a-layout-content :style="{ margin: '24px 16px 0' }">
-          <div :style="{ padding: '24px', background: '#fff', minHeight: '360px' }">content</div>
+        <a-layout-content>
+          <code-editor :option="editorOptions" ref="editor" v-model="currentFile.content" height="600px"></code-editor>
         </a-layout-content>
       </a-layout>
     </a-layout>
@@ -70,14 +77,19 @@
       ok-text="确认"
       v-model="modal.show"
     >
-      <input v-model="modal.value" />
+      <a-input v-model="modal.value" />
     </a-modal>
   </a-card>
 </template>
 
 <script>
-import { listRequest, filesRequest, removeRequest } from '@/api/scripts.js'
+import { listRequest, filesRequest, removeFileRequest, createRequest, renameFileRequest, createFileRequest } from '@/api/scripts.js'
+import CodeEditor from '@/components/code-editor'
+
 export default {
+  components: {
+    CodeEditor
+  },
   data() {
     return {
       scrpitFolder: [],
@@ -87,12 +99,19 @@ export default {
       expandedKeys: [],
       currentFile: {
         directory: false,
-        name: ''
+        name: '',
+        path: '',
+        content: ''
       },
       modal: {
         title: '弹窗标题',
         value: '',
-        show: false
+        show: false,
+        callback: '',
+        param: null
+      },
+      editorOptions: {
+        language: 'javascript'
       }
     }
   },
@@ -130,7 +149,7 @@ export default {
       this.currentFileList = []
       this.selectedKeys = []
       this.expandedKeys = []
-      this.currentFile.name = value
+      this.currentFile.name = ''
       if (value) {
         filesRequest(this.scrpitSelect, data => {
           this.expandedKeys.push(data.data.node.name)
@@ -138,11 +157,17 @@ export default {
         })
       }
     },
+    // 切换脚本目录
     onTreeSelect(selectedKeys, e) {
       this.selectedKeys = selectedKeys
       this.currentFile.name = selectedKeys[0]
+      this.currentFile.path = selectedKeys[0]
+      this.currentFile.directory = false
       if (selectedKeys.length > 0) {
         this.currentFile.directory = e.selectedNodes[0].data.props.directory
+        if (this.currentFile.directory === true) {
+          this.currentFile.name = ''
+        }
       }
     },
     onTreeExpand(expandedKeys, e) {
@@ -157,16 +182,21 @@ export default {
     handleMenuClick(e) {
       switch (e.key) {
         case 'newFile':
-          this.openModal('请输入文件名称')
+          this.modal.param = 0
+          this.openModal('请输入文件名称', null, 'createFileAction')
           break
         case 'newFolder':
-          this.openModal('请输入文件夹名称')
+          this.modal.param = 1
+          this.openModal('请输入文件夹名称', null, 'createFileAction')
           break
         case 'rename':
-          this.openModal('重命名')
+          let arrFile = this.currentFile.path.split('/')
+          let value = arrFile[arrFile.length - 1]
+          this.openModal('重命名', value, 'renameFileAction')
           break
         case 'delete':
           let filePath = this.currentFile.name.split('/')
+          let that = this
           this.$confirm({
             title: '是否删除?',
             content: '确认删除：' + filePath[filePath.length - 1],
@@ -174,11 +204,13 @@ export default {
             okType: 'danger',
             cancelText: '取消',
             onOk() {
-              let params = {}
-              params.file = ''
-              params.scriptName = ''
-              removeRequest(params, data => {
-                this.$message.success(data.message)
+              let params = {
+                scriptName: that.scrpitSelect
+              }
+              params.file = that.currentFile.path.replace(params.scriptName + '/', '')
+              removeFileRequest(params, data => {
+                that.$message.success(data.message)
+                that.listAction()
               })
             }
           })
@@ -187,18 +219,57 @@ export default {
     },
     // 当前是否选中文件
     isSelectFile() {
-      if (this.currentFile.name) {
+      if (this.currentFile.name || this.currentFile.directory) {
         return true
       }
       return false
     },
-    openModal(title, value) {
+    openModal(title, value, callback) {
       this.modal.title = title
       this.modal.value = value
+      this.modal.callback = callback
       this.modal.show = true
     },
     handleModal() {
-      debugger
+      if (!this.modal.value) {
+        this.$message.error('输入的值不能为空')
+      } else if (this.modal.callback) {
+        this[this.modal.callback]()
+      }
+    },
+    // 新建脚本
+    createAction() {
+      createRequest(this.modal.value, data => {
+        this.$message.success(data.message)
+        this.modal.show = false
+        this.listAction()
+      })
+    },
+    // 重命名请求
+    renameFileAction() {
+      let params = {
+        scriptName: this.scrpitSelect,
+        newFile: this.modal.value
+      }
+      params.file = this.currentFile.path.replace(params.scriptName + '/', '')
+      renameFileRequest(params, data => {
+        this.$message.success(data.message)
+        this.modal.show = false
+        this.scrpitHandleChange(this.scrpitSelect)
+      })
+    },
+    // 创建文件或文件夹
+    createFileAction() {
+      let params = {
+        scriptName: this.scrpitSelect,
+        dir: this.modal.param
+      }
+      params.file = this.currentFile.path.replace(params.scriptName + '/', '') + '/' + this.modal.value
+      createFileRequest(params, data => {
+        this.$message.success(data.message)
+        this.modal.show = false
+        this.scrpitHandleChange(this.scrpitSelect)
+      })
     }
   },
   mounted() {

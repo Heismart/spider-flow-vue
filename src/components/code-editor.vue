@@ -1,5 +1,5 @@
 <template>
-  <div class="editor-container" ref="container"></div>
+  <div class="editor-container" ref="container" :style="{width:width, height:height}"></div>
 </template>
 
 <script>
@@ -15,6 +15,18 @@ export default {
       default() {
         return {}
       }
+    },
+    width: {
+      type: String,
+      default() {
+        return '100%'
+      }
+    },
+    height: {
+      type: String,
+      default() {
+        return '500px'
+      }
     }
   },
   data() {
@@ -29,7 +41,7 @@ export default {
   },
   watch: {
     option: {
-      handler: function(val, oldVal) {
+      handler: function (val, oldVal) {
         Object(this.editorPption, this.option)
         this.init()
       },
