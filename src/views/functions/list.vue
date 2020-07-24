@@ -72,7 +72,8 @@ export default {
       },
       queryParam: {
         page: 1,
-        limit: 10
+        limit: 10,
+        name: ''
       },
       pagination: {
         current: 1,
