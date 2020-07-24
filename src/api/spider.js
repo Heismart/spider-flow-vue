@@ -11,3 +11,19 @@ export const startStopRequest = (isStart, id, succFun, errFun) => {
     id
   }, succFun, errFun)
 }
+// 修改cron表达式
+export const cronRequest = (params, succFun, errFun) => {
+  request.send(suffix + 'cron', params, succFun, errFun)
+}
+// 删除爬虫
+export const removeRequest = (id, succFun, errFun) => {
+  request.send(suffix + 'remove', {
+    id
+  }, succFun, errFun)
+}
+// 手动运行爬虫
+export const runRequest = (id, succFun, errFun) => {
+  request.send(suffix + 'run', {
+    id
+  }, succFun, errFun)
+}

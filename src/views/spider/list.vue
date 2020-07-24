@@ -21,51 +21,87 @@
       <template slot="name" slot-scope="val">
         <a>{{val}}</a>
       </template>
-      <template slot="cron" slot-scope="val">
-        <a>{{val?val:'编辑cron'}}</a>
+      <template slot="cron" slot-scope="val,row">
+        <a @click="openCronModal(val,row)">{{val?val:'编辑cron'}}</a>
       </template>
       <template slot="enabled" slot-scope="val,row">
         <span v-show="false">{{$set(row,'cronChecked',val === '1')}}</span>
         <a-switch
+          :loading="row.loading"
           @change="checked => handleSwitch(checked,row)"
           checked-children="定时"
           un-checked-children="长任务"
           v-model="row.cronChecked"
-          :loading="row.loading"
         />
       </template>
       <template slot="runFinish" slot-scope="val,record">
         <a>{{record.running}}/{{record.executeCount?record.executeCount:0}}</a>
       </template>
       <template slot="operation" slot-scope="val">
-        <a @click="openDetail(val)">编辑</a>
+        <a-tooltip placement="top" title="通知设置">
+          <a @click="$refs.noticeModel.showDetail(val)">
+            <a-icon type="bell" />
+          </a>
+        </a-tooltip>
+        <a-divider type="vertical" />
+        <a-tooltip placement="top" title="手动运行">
+          <a-popconfirm
+            @confirm="runAction(val)"
+            cancel-text="取消"
+            ok-text="确定"
+            placement="topRight"
+            title="您确定要手动运行一次该爬虫吗？"
+          >
+            <a>
+              <a-icon type="play-circle" />
+            </a>
+          </a-popconfirm>
+        </a-tooltip>
+        <a-divider type="vertical" />
+        <a-tooltip placement="top" title="日志">
+          <a>
+            <a-icon type="history" />
+          </a>
+        </a-tooltip>
         <a-divider type="vertical" />
         <a-popconfirm
-          @confirm="deleteAction(val)"
+          @confirm="removeAction(val)"
           cancel-text="取消"
           ok-text="确定"
           placement="topRight"
-          title="您确定要删除此函数吗？"
+          title="您确定要删除此爬虫吗？"
         >
-          <a>删除</a>
+          <a-tooltip placement="top" title="删除">
+            <a>
+              <a-icon type="delete" />
+            </a>
+          </a-tooltip>
         </a-popconfirm>
       </template>
     </a-table>
-    <cron v-model="test" />
+    <cron-modal :data="cron.value" @ok="handleCronModal" ref="cronModal" />
+    <notice-model ref="noticeModel"></notice-model>
   </a-card>
 </template>
 
 <script>
-import { listRequest, startStopRequest } from '@/api/spider.js'
-import Cron from 'antd-cron'
+import {
+  listRequest,
+  startStopRequest,
+  cronRequest,
+  removeRequest,
+  runRequest
+} from '@/api/spider.js'
+import CronModal from '@/components/CronModal.vue'
+import NoticeModel from './noticeModal.vue'
 
 export default {
   components: {
-    Cron
+    CronModal,
+    NoticeModel
   },
   data() {
     return {
-      test: '',
       columns: [
         {
           title: '序号',
@@ -113,7 +149,7 @@ export default {
         {
           title: '操作',
           dataIndex: 'id',
-          width: 120,
+          width: 140,
           scopedSlots: { customRender: 'operation' }
         }
       ],
@@ -140,6 +176,10 @@ export default {
         showQuickJumper: true,
         showSizeChanger: true,
         total: 0
+      },
+      cron: {
+        value: '',
+        row: {}
       }
     }
   },
@@ -170,15 +210,73 @@ export default {
       } else {
         this.$set(row, 'loading', true)
         let that = this
-        startStopRequest(checked, row.id, data => {
-          that.$message.success((checked ? '切换为定时任务' : '切换为长任务') + '成功')
-          this.listAction(this.queryParam.page)
-        }, data => {
-          that.$message.error((checked ? '切换为定时任务' : '切换为长任务') + '失败')
-          that.$set(row, 'loading', false)
-          this.listAction(this.queryParam.page)
-        })
+        startStopRequest(
+          checked,
+          row.id,
+          data => {
+            that.$message.success(
+              (checked ? '切换为定时任务' : '切换为长任务') + '成功'
+            )
+            this.listAction(this.queryParam.page)
+          },
+          data => {
+            that.$message.error(
+              (checked ? '切换为定时任务' : '切换为长任务') + '失败'
+            )
+            that.$set(row, 'loading', false)
+            this.listAction(this.queryParam.page)
+          }
+        )
       }
+    },
+    // 打开cron弹窗
+    openCronModal(val, row) {
+      this.cron.value = val
+      this.cron.row = row
+      this.$refs.cronModal.show()
+    },
+    // cron弹窗确认按钮
+    handleCronModal(val) {
+      let params = {
+        id: this.cron.row.id,
+        cron: val
+      }
+      cronRequest(
+        params,
+        data => {
+          this.$message.success('修改成功')
+          this.listAction(this.queryParam.page)
+        },
+        data => {
+          this.$message.error('修改失败')
+        }
+      )
+    },
+    // 删除爬虫
+    removeAction(id) {
+      removeRequest(
+        id,
+        data => {
+          this.$message.success('删除成功')
+          this.listAction(this.queryParam.page)
+        },
+        data => {
+          this.$message.error('删除失败')
+        }
+      )
+    },
+    // 手动运行爬虫
+    runAction(id) {
+      runRequest(
+        id,
+        data => {
+          this.$message.success('手动运行成功,后台运行中...')
+          this.listAction(this.queryParam.page)
+        },
+        data => {
+          this.$message.error('手动运行失败')
+        }
+      )
     }
   },
   mounted() {
