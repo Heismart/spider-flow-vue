@@ -61,6 +61,16 @@ export default [{
       icon: 'container',
       login: 1
     }
+  }, {
+    path: '/task_list/:flowId',
+    name: 'task_list',
+    component: () => import('@/views/spider/taskList.vue'),
+    meta: {
+      title: '任务详情',
+      icon: 'container',
+      login: 1,
+      hideInMenu: 1
+    }
   }]
 }, {
   path: '/_variables_list',

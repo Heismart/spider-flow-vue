@@ -119,7 +119,7 @@ export default {
       this.pagination = pagination
       this.queryParam.page = this.pagination.current
       this.queryParam.limit = this.pagination.pageSize
-      this.query()
+      this.listAction()
     },
     openDetail(id) {
       this.$refs.detailModel.showDetail(id)

@@ -27,3 +27,7 @@ export const runRequest = (id, succFun, errFun) => {
     id
   }, succFun, errFun)
 }
+// 下载日志文件
+export const logDownloadRequest = (logId, taskId) => {
+  window.open('spider/log/download?id=' + logId + '&taskId=' + (taskId || ''))
+}

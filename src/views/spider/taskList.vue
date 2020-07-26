@@ -1,8 +1,5 @@
 <template>
   <a-card>
-    <div class="table-operator">
-      <a-button @click="openDetail()" icon="plus" type="primary">添加数据源</a-button>
-    </div>
     <a-table
       :columns="columns"
       :data-source="data.records"
@@ -11,31 +8,29 @@
       rowKey="id"
     >
       <template slot="operation" slot-scope="value">
-        <a @click="openDetail(value)">编辑</a>
+        <!-- <a>查看日志</a>
+        <a-divider type="vertical" />-->
+        <a @click="logDownloadAction(value)">下载日志</a>
         <a-divider type="vertical" />
         <a-popconfirm
-          @confirm="deleteAction(value)"
+          @confirm="removeAction(value)"
           cancel-text="取消"
           ok-text="确定"
           placement="topRight"
-          title="您确定要删除此数据源吗？"
+          title="您确定要删除此记录吗？"
         >
-          <a>删除</a>
+          <a>删除记录</a>
         </a-popconfirm>
       </template>
     </a-table>
-    <detail-model @ok="listAction" ref="detailModel"></detail-model>
   </a-card>
 </template>
 
 <script>
-import { listRequest, deleteRequest } from '@/api/datasources.js'
-import detailModel from './detail'
+import { listRequest, removeRequest } from '@/api/task.js'
+import { logDownloadRequest } from '@/api/spider.js'
 
 export default {
-  components: {
-    detailModel
-  },
   data() {
     return {
       columns: [
@@ -45,21 +40,17 @@ export default {
           customRender: (text, record, index) => `${index + 1}`
         },
         {
-          title: '数据源名称',
-          dataIndex: 'name'
+          title: '任务开始时间',
+          dataIndex: 'beginTime'
         },
         {
-          title: '驱动',
-          dataIndex: 'driverClassName'
-        },
-        {
-          title: '创建时间',
-          dataIndex: 'createDate'
+          title: '任务结束时间',
+          dataIndex: 'endTime'
         },
         {
           title: '操作',
           dataIndex: 'id',
-          width: 120,
+          width: 240,
           scopedSlots: { customRender: 'operation' }
         }
       ],
@@ -73,7 +64,8 @@ export default {
       },
       queryParam: {
         page: 1,
-        limit: 10
+        limit: 10,
+        flowId: ''
       },
       pagination: {
         current: 1,
@@ -85,8 +77,7 @@ export default {
         showQuickJumper: true,
         showSizeChanger: true,
         total: 0
-      },
-      detailVisible: false
+      }
     }
   },
   methods: {
@@ -97,8 +88,8 @@ export default {
         this.pagination.pageSize = this.data.size
       })
     },
-    deleteAction(id) {
-      deleteRequest(
+    removeAction(id) {
+      removeRequest(
         id,
         data => {
           this.$message.success(data.message)
@@ -117,11 +108,13 @@ export default {
       this.queryParam.limit = this.pagination.pageSize
       this.listAction()
     },
-    openDetail(id) {
-      this.$refs.detailModel.showDetail(id)
+    // 下载日志文件
+    logDownloadAction(taskId) {
+      logDownloadRequest(this.queryParam.flowId, taskId)
     }
   },
   mounted() {
+    this.queryParam.flowId = this.$route.params.flowId
     this.listAction()
   }
 }

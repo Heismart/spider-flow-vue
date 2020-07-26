@@ -35,7 +35,9 @@
         />
       </template>
       <template slot="runFinish" slot-scope="val,record">
-        <a>{{record.running}}/{{record.executeCount?record.executeCount:0}}</a>
+        <a
+          @click="goTaskListPage(record.id)"
+        >{{record.running}}/{{record.executeCount?record.executeCount:0}}</a>
       </template>
       <template slot="operation" slot-scope="val">
         <a-tooltip placement="top" title="通知设置">
@@ -200,7 +202,7 @@ export default {
       this.pagination = pagination
       this.queryParam.page = this.pagination.current
       this.queryParam.limit = this.pagination.pageSize
-      this.query()
+      this.listAction()
     },
     // 定时任务切换
     handleSwitch(checked, row) {
@@ -277,6 +279,10 @@ export default {
           this.$message.error('手动运行失败')
         }
       )
+    },
+    // 前往任务详情列表页
+    goTaskListPage(flowId) {
+      this.$router.push('/task_list/' + flowId)
     }
   },
   mounted() {
