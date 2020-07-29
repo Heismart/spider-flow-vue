@@ -1,0 +1,75 @@
+[{
+    "type": "ant",
+    "icon": "rollback",
+    "title": "返回列表"
+}, {
+    "type": "divider"
+}, {
+    "type": "ant",
+    "icon": "save",
+    "title": "保存（Ctrl+S）"
+}, {
+    "type": "ant",
+    "icon": "play-circle",
+    "title": "测试（Ctrl+Q）"
+}, {
+    "type": "divider"
+}, {
+    "type": "ant",
+    "icon": "undo",
+    "title": "撤销（Ctrl+Z）"
+}, {
+    "type": "ant",
+    "icon": "redo",
+    "title": "反撤销（Ctrl+Y）"
+}, {
+    "type": "ant",
+    "icon": "history",
+    "title": "历史版本"
+}, {
+    "type": "divider"
+}, {
+    "type": "ant",
+    "icon": "select",
+    "title": "全选（Ctrl+A）"
+}, {
+    "type": "ant",
+    "icon": "scissor",
+    "title": "剪切（Ctrl+X）"
+}, {
+    "type": "ant",
+    "icon": "copy",
+    "title": "复制（Ctrl+C）"
+}, {
+    "type": "ant",
+    "icon": "snippets",
+    "title": "粘贴（Ctrl+V）"
+}, {
+    "type": "ant",
+    "icon": "delete",
+    "title": "删除（Delete）"
+}, {
+    "type": "divider"
+}, {
+    "type": "ant",
+    "icon": "file-text",
+    "title": "XML编辑"
+}, {
+    "type": "ant",
+    "icon": "printer",
+    "title": "打印XML"
+}, {
+    "type": "divider"
+}, {
+    "type": "ant",
+    "icon": "bug",
+    "title": "调试（Ctrl+Q）"
+}, {
+    "type": "ant",
+    "icon": "step-forward",
+    "title": "下一步"
+}, {
+    "type": "ant",
+    "icon": "stop",
+    "title": "停止"
+}]

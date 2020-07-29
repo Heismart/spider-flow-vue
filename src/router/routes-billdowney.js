@@ -62,6 +62,16 @@ export default [{
       login: 1
     }
   }, {
+    path: '/spider_detail/:flowId',
+    name: 'spider_detail',
+    component: () => import('@/views/spider/detail.vue'),
+    meta: {
+      title: '爬虫详情',
+      icon: 'container',
+      login: 1,
+      hideInMenu: 1
+    }
+  }, {
     path: '/task_list/:flowId',
     name: 'task_list',
     component: () => import('@/views/spider/taskList.vue'),

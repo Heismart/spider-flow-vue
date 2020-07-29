@@ -18,8 +18,8 @@
       @change="handleChange"
       rowKey="id"
     >
-      <template slot="name" slot-scope="val">
-        <a>{{val}}</a>
+      <template slot="name" slot-scope="val,row">
+        <a @click="goSpiderDetailPage(row.id)">{{val}}</a>
       </template>
       <template slot="cron" slot-scope="val,row">
         <a @click="openCronModal(val,row)">{{val?val:'编辑cron'}}</a>
@@ -61,7 +61,7 @@
         </a-tooltip>
         <a-divider type="vertical" />
         <a-tooltip placement="top" title="日志">
-          <a>
+          <a @click="logDownloadAction(val)">
             <a-icon type="history" />
           </a>
         </a-tooltip>
@@ -92,7 +92,8 @@ import {
   startStopRequest,
   cronRequest,
   removeRequest,
-  runRequest
+  runRequest,
+  logDownloadRequest
 } from '@/api/spider.js'
 import CronModal from '@/components/CronModal.vue'
 import NoticeModel from './noticeModal.vue'
@@ -283,6 +284,14 @@ export default {
     // 前往任务详情列表页
     goTaskListPage(flowId) {
       this.$router.push('/task_list/' + flowId)
+    },
+    // 下载日志文件
+    logDownloadAction(flowId) {
+      logDownloadRequest(flowId)
+    },
+    // 前往爬虫详情页
+    goSpiderDetailPage(flowId) {
+      this.$router.push('/spider_detail/' + flowId)
     }
   },
   mounted() {
