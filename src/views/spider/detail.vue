@@ -37,8 +37,40 @@ export default {
       headerBtns: HeaderBtnsJson
     }
   },
+  methods: {
+    // 绑定键盘事件
+    bindKeyEvent() {
+      window.onkeydown = e => {
+        e.preventDefault()
+        let key = e.key
+        this.headerBtns.forEach(element => {
+          if (element.exeFunKey && element.exeFunKey.length > 0) {
+            if (
+              (element.exeFunKey.indexOf('ctrl') !== -1 &&
+                e.ctrlKey === true &&
+                element.exeFunKey.indexOf(key.toLowerCase()) !== -1) ||
+              (element.exeFunKey.indexOf('alt') !== -1 &&
+                e.altKey === true &&
+                element.exeFunKey.indexOf(key.toLowerCase()) !== -1) ||
+              element.exeFunKey.indexOf(key.toLowerCase()) !== -1
+            ) {
+              console.log(element.title)
+            }
+          }
+        })
+        console.log(key)
+        console.log(e.keyCode)
+        console.log(e.altKey)
+        console.log(e.ctrlKey)
+      }
+    }
+  },
   mounted() {
     this.queryParam.flowId = this.$route.params.flowId
+    this.bindKeyEvent()
+  },
+  destroyed() {
+    window.onkeydown = null
   }
 }
 </script>

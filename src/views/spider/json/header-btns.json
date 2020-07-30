@@ -7,21 +7,29 @@
 }, {
     "type": "ant",
     "icon": "save",
-    "title": "保存（Ctrl+S）"
+    "title": "保存（Ctrl+S）",
+    "exeFun": "",
+    "exeFunKey": ["ctrl", "s"]
 }, {
     "type": "ant",
     "icon": "play-circle",
-    "title": "测试（Ctrl+Q）"
+    "title": "测试（Ctrl+Q）",
+    "exeFun": "",
+    "exeFunKey": ["ctrl", "q"]
 }, {
     "type": "divider"
 }, {
     "type": "ant",
     "icon": "undo",
-    "title": "撤销（Ctrl+Z）"
+    "title": "撤销（Ctrl+Z）",
+    "exeFun": "",
+    "exeFunKey": ["ctrl", "z"]
 }, {
     "type": "ant",
     "icon": "redo",
-    "title": "反撤销（Ctrl+Y）"
+    "title": "反撤销（Ctrl+Y）",
+    "exeFun": "",
+    "exeFunKey": ["ctrl", "y"]
 }, {
     "type": "ant",
     "icon": "history",
@@ -31,23 +39,33 @@
 }, {
     "type": "ant",
     "icon": "select",
-    "title": "全选（Ctrl+A）"
+    "title": "全选（Ctrl+A）",
+    "exeFun": "",
+    "exeFunKey": ["ctrl", "a"]
 }, {
     "type": "ant",
     "icon": "scissor",
-    "title": "剪切（Ctrl+X）"
+    "title": "剪切（Ctrl+X）",
+    "exeFun": "",
+    "exeFunKey": ["ctrl", "x"]
 }, {
     "type": "ant",
     "icon": "copy",
-    "title": "复制（Ctrl+C）"
+    "title": "复制（Ctrl+C）",
+    "exeFun": "",
+    "exeFunKey": ["ctrl", "c"]
 }, {
     "type": "ant",
     "icon": "snippets",
-    "title": "粘贴（Ctrl+V）"
+    "title": "粘贴（Ctrl+V）",
+    "exeFun": "",
+    "exeFunKey": ["ctrl", "v"]
 }, {
     "type": "ant",
     "icon": "delete",
-    "title": "删除（Delete）"
+    "title": "删除（Delete）",
+    "exeFun": "",
+    "exeFunKey": ["delete"]
 }, {
     "type": "divider"
 }, {
@@ -63,7 +81,7 @@
 }, {
     "type": "ant",
     "icon": "bug",
-    "title": "调试（Ctrl+Q）"
+    "title": "调试"
 }, {
     "type": "ant",
     "icon": "step-forward",
