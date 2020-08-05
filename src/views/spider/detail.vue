@@ -18,8 +18,12 @@
       </template>
     </a-layout-header>
     <a-layout>
-      <a-layout-sider width="100px"></a-layout-sider>
-      <a-layout-content class="spider-content"></a-layout-content>
+      <a-layout-sider width="50px">
+        <div class="spider-toolbar-container" ref="spiderToolbarContainer"></div>
+      </a-layout-sider>
+      <a-layout-content class="spider-content">
+        <div class="spider-editor-container" ref="spiderEditorContainer"></div>
+      </a-layout-content>
     </a-layout>
     <a-layout-footer></a-layout-footer>
   </a-layout>
@@ -27,6 +31,8 @@
 
 <script>
 import HeaderBtnsJson from './json/header-btns.json'
+import { SpiderEditor } from '@/libs/spidereditor/spider-editor'
+import { loadShapes } from '@/libs/spidereditor/editor'
 
 export default {
   data() {
@@ -34,15 +40,32 @@ export default {
       queryParam: {
         flowId: ''
       },
-      headerBtns: HeaderBtnsJson
+      headerBtns: HeaderBtnsJson,
+      editor: null
     }
   },
   methods: {
     // 绑定键盘事件
     bindKeyEvent() {
       window.onkeydown = e => {
-        e.preventDefault()
         let key = e.key
+        let exclude = [
+          'F1',
+          'F2',
+          'F3',
+          'F4',
+          'F5',
+          'F6',
+          'F7',
+          'F8',
+          'F9',
+          'F10',
+          'F11',
+          'F12'
+        ]
+        if (exclude.indexOf(key) === -1) {
+          e.preventDefault()
+        }
         this.headerBtns.forEach(element => {
           if (element.exeFunKey && element.exeFunKey.length > 0) {
             if (
@@ -58,15 +81,25 @@ export default {
             }
           }
         })
-        console.log(key)
-        console.log(e.keyCode)
-        console.log(e.altKey)
-        console.log(e.ctrlKey)
       }
+    },
+    // 渲染spider editor
+    renderSpiderEditor() {
+      let _this = this
+      let editor = new SpiderEditor({
+        element: this.$refs.spiderEditorContainer,
+        selectedCellListener: function(sender, evt) {
+          _this.onSelectedCell(sender, evt)
+        }
+      })
+      // 加载图形
+      loadShapes(editor, this.$refs.spiderToolbarContainer)
+      this.editor = editor
     }
   },
   mounted() {
     this.queryParam.flowId = this.$route.params.flowId
+    this.renderSpiderEditor()
     this.bindKeyEvent()
   },
   destroyed() {
