@@ -57,24 +57,25 @@ export default {
   methods: {
     // 绑定键盘事件
     bindKeyEvent() {
-      window.onkeydown = e => {
-        let key = e.key
-        let exclude = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12']
-        if (exclude.indexOf(key) === -1) {
-          e.preventDefault()
-        }
-        this.headerBtns.forEach(element => {
-          if (element.exeFunKey && element.exeFunKey.length > 0) {
-            if (
-              (element.exeFunKey.indexOf('ctrl') !== -1 && e.ctrlKey === true && element.exeFunKey.indexOf(key.toLowerCase()) !== -1) ||
-              (element.exeFunKey.indexOf('alt') !== -1 && e.altKey === true && element.exeFunKey.indexOf(key.toLowerCase()) !== -1) ||
-              element.exeFunKey.indexOf(key.toLowerCase()) !== -1
-            ) {
-              console.log(element.title)
-            }
-          }
-        })
-      }
+      // 影响了其它输入框的输入，需要改变实现
+      // window.onkeydown = e => {
+      //   let key = e.key
+      //   let exclude = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12']
+      //   if (exclude.indexOf(key) === -1) {
+      //     e.preventDefault()
+      //   }
+      //   this.headerBtns.forEach(element => {
+      //     if (element.exeFunKey && element.exeFunKey.length > 0) {
+      //       if (
+      //         (element.exeFunKey.indexOf('ctrl') !== -1 && e.ctrlKey === true && element.exeFunKey.indexOf(key.toLowerCase()) !== -1) ||
+      //         (element.exeFunKey.indexOf('alt') !== -1 && e.altKey === true && element.exeFunKey.indexOf(key.toLowerCase()) !== -1) ||
+      //         element.exeFunKey.indexOf(key.toLowerCase()) !== -1
+      //       ) {
+      //         console.log(element.title)
+      //       }
+      //     }
+      //   })
+      // }
     },
     // 选择cell触发的方法
     onSelectedCell(cell) {
