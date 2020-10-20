@@ -27,9 +27,11 @@
       </a-form>
     </a-tab-pane>
     <a-tab-pane key="2" tab="全局参数">
+      <a-button type="link" :size="size" @click="globalParamsMove()">添加一个参数</a-button>
+      <a-button type="link" :size="size">批量设置参数</a-button>
       <a-table :columns="globalParamsColumns" :data-source="globalParamsData" bordered :size="size" :pagination="false">
-        <template slot="edit-cell" slot-scope="text, record">
-          <a-input style="margin: -5px 0" :value="text" @change="e => handleChange(e.target.value, record.key, col)" :size="size" />
+        <template v-for="col in ['parameter-name', 'parameter-value', 'parameter-description']" :slot="col" slot-scope="text, record">
+          <a-input :key="col" style="margin: -5px 0" :value="text" @change="e => handleChange(e.target.value, record, col)" :size="size" />
         </template>
         <template slot="operation" slot-scope="text, record, index">
           <div class="editable-row-operations">
@@ -38,7 +40,9 @@
               <a-divider type="vertical" />
               <a @click="globalParamsMove(index, 1)">下移</a>
               <a-divider type="vertical" />
-              <a @click="globalParamsMove(index, 0)">删除</a>
+              <a-popconfirm title="您确定要删除吗？" ok-text="确定" cancel-text="取消" @confirm="globalParamsMove(index, 0)">
+                <a>删除</a>
+              </a-popconfirm>
             </span>
           </div>
         </template>
@@ -73,18 +77,18 @@ export default {
           title: '参数名',
           dataIndex: 'parameter-name',
           width: 150,
-          scopedSlots: { customRender: 'edit-cell' }
+          scopedSlots: { customRender: 'parameter-name' }
         },
         {
           title: '参数值',
           dataIndex: 'parameter-value',
           width: 250,
-          scopedSlots: { customRender: 'edit-cell' }
+          scopedSlots: { customRender: 'parameter-value' }
         },
         {
           title: '参数描述',
           dataIndex: 'parameter-description',
-          scopedSlots: { customRender: 'edit-cell' }
+          scopedSlots: { customRender: 'parameter-description' }
         },
         {
           title: '操作',
@@ -92,12 +96,30 @@ export default {
           width: 150,
           scopedSlots: { customRender: 'operation' }
         }
-      ]
+      ],
+      globalParamsData: []
     }
   },
-  computed: {
-    globalParamsData() {
-      return [{}]
+  watch: {
+    globalParamsData: {
+      handler: function(val, oldVal) {
+        let params = {
+          'parameter-name': [],
+          'parameter-description': [],
+          'parameter-value': []
+        }
+        val.forEach(element => {
+          for (let key in element) {
+            if (key !== 'key' && element[key]) {
+              params[key].push(element[key])
+            }
+          }
+        })
+        for (let key in params) {
+          this.jsonObjHandle(key, params[key])
+        }
+      },
+      deep: true
     }
   },
   methods: {
@@ -107,7 +129,62 @@ export default {
         this.cell.data.set(key, val)
       }
       return this.cell.data.get(key)
+    },
+    globalParamsMove(index, oper) {
+      switch (oper) {
+        case -1: // 上移
+          if (index > 0) {
+            let temp = this.globalParamsData.splice(index, 1)
+            this.globalParamsData.splice(index - 1, 0, temp[0])
+          }
+          break
+        case 1: // 下移
+          if (index < this.globalParamsData.length) {
+            let temp = this.globalParamsData.splice(index, 1)
+            this.globalParamsData.splice(index + 1, 0, temp[0])
+          }
+          break
+        case 0: // 删除
+          this.globalParamsData.splice(index, 1)
+          break
+        default:
+          // 添加
+          this.globalParamsData.push({
+            key: this.globalParamsData.length,
+            'parameter-name': '',
+            'parameter-description': '',
+            'parameter-value': ''
+          })
+          break
+      }
+    },
+    handleChange(value, record, col) {
+      record[col] = value
+    },
+    changeDataToArray(target, objData, length) {
+      let that = this
+      let tempKeys = []
+      for (const key in objData) {
+        tempKeys.push(key)
+      }
+      for (let index = 0; index < length; index++) {
+        let tempData = {
+          key: index
+        }
+        tempKeys.forEach(key => {
+          tempData[key] = objData[key][index]
+        })
+        that.globalParamsData.push(tempData)
+      }
     }
+  },
+  mounted() {
+    let paramsData = {
+      'parameter-name': this.jsonObjHandle('parameter-name'),
+      'parameter-description': this.jsonObjHandle('parameter-description'),
+      'parameter-value': this.jsonObjHandle('parameter-value')
+    }
+    this.changeDataToArray(this.globalParamsData, paramsData, paramsData['parameter-name'] ? paramsData['parameter-name'].length : 0)
   }
 }
 </script>
