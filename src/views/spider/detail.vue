@@ -54,6 +54,15 @@ export default {
       return () => import(`@/views/spider/templates/${template}`)
     }
   },
+  watch: {
+    'selectCell.value': {
+      handler(newValue) {
+        if (this.selectCell.valueChanged) {
+          this.editor.graph.model.setValue(this.selectCell, newValue)
+        }
+      }
+    }
+  },
   methods: {
     // 绑定键盘事件
     bindKeyEvent() {
