@@ -229,7 +229,6 @@ export default {
       })
       this.changeDataToArray(element1, this.allData[element1], paramsData, length)
     })
-    console.log(this.cell)
   }
 }
 </script>

@@ -17,9 +17,6 @@ export default {
   props: {
     editor: Object,
     cell: Object
-  },
-  mounted() {
-    console.log(this.cell)
   }
 }
 </script>
