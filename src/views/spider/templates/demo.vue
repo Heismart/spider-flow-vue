@@ -5,7 +5,7 @@
         <a-row>
           <a-col :span="formItemLayout.colSpan">
             <a-form-item label="xxxx">
-              <a-input placeholder="xxxx" :size="size" :defaultValue="jsonObjHandle('xxxx')" @change="e => jsonObjHandle('xxxx', e)" />
+              <a-input placeholder="xxxx" :size="size" :defaultValue="getCellValue('xxxx')" @change="e => setCellValue('xxxx', e)" />
             </a-form-item>
           </a-col>
         </a-row>

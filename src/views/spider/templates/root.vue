@@ -6,12 +6,12 @@
           <a-row>
             <a-col :span="formItemLayout.colSpan">
               <a-form-item label="爬虫名称">
-                <a-input placeholder="请输入爬虫名称" :size="size" :defaultValue="jsonObjHandle('spiderName')" @change="e => jsonObjHandle('spiderName', e)" />
+                <a-input placeholder="请输入爬虫名称" :size="size" :defaultValue="getCellValue('spiderName')" @change="e => setCellValue('spiderName', e)" />
               </a-form-item>
             </a-col>
             <a-col :span="formItemLayout.colSpan">
               <a-form-item label="提交策略">
-                <a-select :size="size" :defaultValue="jsonObjHandle('submit-strategy')" @change="val => jsonObjHandle('submit-strategy', val)">
+                <a-select :size="size" :defaultValue="getCellValue('submit-strategy', 'random')" @change="val => setCellValue('submit-strategy', val)">
                   <a-select-option value="random">随机</a-select-option>
                   <a-select-option value="linked">顺序</a-select-option>
                   <a-select-option value="child">子优先</a-select-option>
@@ -21,7 +21,7 @@
             </a-col>
             <a-col :span="formItemLayout.colSpan">
               <a-form-item label="最大线程数">
-                <a-input-number placeholder="请输入最大线程数" :defaultValue="jsonObjHandle('threadCount')" @change="e => jsonObjHandle('threadCount', e)" :size="size" :min="1" style="width: 100%;" />
+                <a-input-number placeholder="请输入最大线程数" :defaultValue="getCellValue('threadCount')" @change="e => setCellValue('threadCount', e)" :size="size" :min="1" style="width: 100%;" />
               </a-form-item>
             </a-col>
           </a-row>
@@ -137,7 +137,7 @@ export default {
         // 写入值到cell
         for (let key2 in params) {
           if (params[key2].length > 0) {
-            this.jsonObjHandle(key2, params[key2])
+            this.setCellValue(key2, params[key2])
           }
         }
       }
@@ -224,7 +224,7 @@ export default {
       let paramsData = {}
       let length = 0
       this[element1].keys.forEach(element2 => {
-        paramsData[element2] = this.jsonObjHandle(element2)
+        paramsData[element2] = this.getCellValue(element2)
         length = paramsData[element2] ? paramsData[element2].length : 0
       })
       this.changeDataToArray(element1, this.allData[element1], paramsData, length)

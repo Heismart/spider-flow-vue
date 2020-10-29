@@ -15,7 +15,16 @@ let mixins = {
   },
   methods: {
     // 获取cell中的值
-    jsonObjHandle(key, val) {
+    getCellValue(key, defaultVal) {
+      let value = this.cell.data.get(key)
+      if (value || !defaultVal) {
+        return value
+      } else {
+        return defaultVal
+      }
+    },
+    // 设置cell中的值
+    setCellValue(key, val) {
       if (val) {
         val = val.target ? val.target.value : val
         this.cell.data.set(key, val)
