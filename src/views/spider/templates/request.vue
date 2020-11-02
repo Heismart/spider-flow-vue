@@ -75,14 +75,29 @@
         </a-row>
       </a-form>
     </a-tab-pane>
+    <a-tab-pane key="paramsConfig" tab="参数">
+      <table-and-modal :editor="editor" :cell="cell" :config="paramsConfig"></table-and-modal>
+    </a-tab-pane>
+    <a-tab-pane key="cookieConfig" tab="Cookie">
+      <table-and-modal :editor="editor" :cell="cell" :config="cookieConfig"></table-and-modal>
+    </a-tab-pane>
+    <a-tab-pane key="headerConfig" tab="Header">
+      <table-and-modal :editor="editor" :cell="cell" :config="headerConfig"></table-and-modal>
+    </a-tab-pane>
   </a-tabs>
 </template>
 
 <script>
 import mixins from '../mixins/spider-mixins.js'
+import TableAndModal from '../components/tableAndModal.vue'
+import data from './root-data.json'
+
 export default {
   name: 'SStart',
   mixins: [mixins],
+  components: {
+    TableAndModal
+  },
   props: {
     editor: Object,
     cell: Object
@@ -116,7 +131,10 @@ export default {
           value: 'repeat-ignore-execute',
           defaultVal: '0'
         }
-      ]
+      ],
+      paramsConfig: data.globalParamsConfig,
+      cookieConfig: data.globalCookieConfig,
+      headerConfig: data.globalHeaderConfig
     }
   },
   methods: {
@@ -143,9 +161,6 @@ export default {
       }
       return arrs
     }
-  },
-  mounted() {
-    console.log(this.cell)
   }
 }
 </script>
