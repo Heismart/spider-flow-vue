@@ -84,6 +84,27 @@
     <a-tab-pane key="headerConfig" tab="Header">
       <table-and-modal :editor="editor" :cell="cell" :config="headerConfig"></table-and-modal>
     </a-tab-pane>
+    <a-tab-pane key="bodyConfig" tab="Body">
+      <a-form layout="horizontal" :label-col="{ span: 2 }" :wrapper-col="{ span: 22 }">
+        <a-form-item label="类型">
+          <a-select :size="size" v-model="bodyTypeValue">
+            <a-select-option value="none">none</a-select-option>
+            <a-select-option value="form-data">form-data</a-select-option>
+            <a-select-option value="raw">raw</a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item label="Content-Type" v-if="bodyTypeValue === 'raw'">
+          <a-select :size="size" :defaultValue="getCellValue('body-content-type', 'text/plain')" @change="val => setCellValue('body-content-type', val)">
+            <a-select-option value="text/plain">text/plain</a-select-option>
+            <a-select-option value="application/json">application/json</a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item label="内容" v-if="bodyTypeValue === 'raw'">
+          <code-editor ref="editor" height="100px" :value="getCellValue('request-body')" @change="val => setCellValue('request-body', val)"></code-editor>
+        </a-form-item>
+        <table-and-modal v-if="bodyTypeValue === 'form-data'" :batchAddBtn="false" :editor="editor" :cell="cell" :config="bodyParameterConfig"></table-and-modal>
+      </a-form>
+    </a-tab-pane>
   </a-tabs>
 </template>
 
@@ -91,12 +112,14 @@
 import mixins from '../mixins/spider-mixins.js'
 import TableAndModal from '../components/tableAndModal.vue'
 import data from './root-data.json'
+import CodeEditor from '@/components/code-editor'
 
 export default {
   name: 'SStart',
   mixins: [mixins],
   components: {
-    TableAndModal
+    TableAndModal,
+    CodeEditor
   },
   props: {
     editor: Object,
@@ -134,7 +157,73 @@ export default {
       ],
       paramsConfig: data.globalParamsConfig,
       cookieConfig: data.globalCookieConfig,
-      headerConfig: data.globalHeaderConfig
+      headerConfig: data.globalHeaderConfig,
+      bodyTypeValue: '',
+      bodyParameterConfig: {
+        title: '参数',
+        keyPrefix: 'parameter-form',
+        keys: ['parameter-form-name', 'parameter-form-type', 'parameter-form-filename', 'parameter-form-value', 'parameter-form-description'],
+        columns: [
+          {
+            title: '参数名',
+            dataIndex: 'parameter-form-name',
+            width: 150,
+            scopedSlots: {
+              customRender: 'parameter-form-name'
+            }
+          },
+          {
+            title: '参数类型',
+            dataIndex: 'parameter-form-type',
+            width: 90,
+            scopedSlots: {
+              customRender: 'parameter-form-type'
+            },
+            inputType: 'select',
+            selectMap: {
+              text: 'text',
+              file: 'file'
+            },
+            selectDefault: 'text'
+          },
+          {
+            title: '文件名',
+            dataIndex: 'parameter-form-filename',
+            width: 200,
+            scopedSlots: {
+              customRender: 'parameter-form-filename'
+            }
+          },
+          {
+            title: '参数值',
+            dataIndex: 'parameter-form-value',
+            scopedSlots: {
+              customRender: 'parameter-form-value'
+            }
+          },
+          {
+            title: '参数描述',
+            dataIndex: 'parameter-form-description',
+            width: 200,
+            scopedSlots: {
+              customRender: 'parameter-form-description'
+            }
+          },
+          {
+            title: '操作',
+            dataIndex: 'operation',
+            width: 150,
+            scopedSlots: {
+              customRender: 'operation'
+            }
+          }
+        ]
+      }
+    }
+  },
+  watch: {
+    bodyTypeValue(newVal, oldVal) {
+      this.setCellValue('body-type', newVal)
     }
   },
   methods: {
@@ -161,6 +250,9 @@ export default {
       }
       return arrs
     }
+  },
+  mounted() {
+    this.bodyTypeValue = this.getCellValue('body-type', 'none')
   }
 }
 </script>

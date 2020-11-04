@@ -1,10 +1,15 @@
 <template>
   <div>
     <a-button type="link" :size="size" @click="moveData()">添加一个{{ config.title }}</a-button>
-    <a-button type="link" :size="size" @click="hideModal(true)">批量设置{{ config.title }}</a-button>
+    <a-button v-if="batchAddBtn" type="link" :size="size" @click="hideModal(true)">批量设置{{ config.title }}</a-button>
     <a-table :columns="config.columns" :data-source="dataSource" bordered :size="size" :pagination="false">
-      <template v-for="col in config.keys" :slot="col" slot-scope="text, record">
-        <a-input :key="col" style="margin: -5px 0" :value="text" @change="e => handleChange(e.target.value, record, col)" :size="size" />
+      <template v-for="col in config.columns" :slot="col.dataIndex" slot-scope="text, record">
+        <a-select v-if="col.inputType === 'select'" :key="col.dataIndex" :size="size" :defaultValue="getCellValue(col.dataIndex, col.selectDefault)" @change="val => setCellValue(col.dataIndex, val)">
+          <template v-for="(key, value) in col.selectMap">
+            <a-select-option :key="key" :value="key">{{ value }}</a-select-option>
+          </template>
+        </a-select>
+        <a-input v-else :key="col.dataIndex" style="margin: -5px 0" :value="text" @change="e => handleChange(e.target.value, record, col.dataIndex)" :size="size" />
       </template>
       <template slot="operation" slot-scope="text, record, index">
         <div class="editable-row-operations">
@@ -34,7 +39,14 @@ export default {
   props: {
     editor: Object,
     cell: Object,
-    config: Object
+    config: Object,
+    batchAddBtn: {
+      type: Boolean,
+      // 对象或数组默认值必须从一个工厂函数获取
+      default: function() {
+        return true
+      }
+    }
   },
   data() {
     return {
