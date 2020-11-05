@@ -25,3 +25,7 @@ export const testRequest = (params, succFun, errFun) => {
   delete params.createDate
   request.send('datasource/test', params, succFun, errFun)
 }
+
+export const allRequest = (succFun, errFun) => {
+  request.send('datasource/all', null, succFun, errFun)
+}

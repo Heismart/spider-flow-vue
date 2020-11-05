@@ -69,7 +69,7 @@
           </a-col>
           <a-col :span="16">
             <a-form-item label="请求设置" :labelCol="{ span: 4 }" :wrapperCol="{ span: 20 }">
-              <a-checkbox-group :options="requestConfig" :default-value="requestConfigValueHandle()" @change="requestConfigValueHandle" />
+              <spider-select :editor="editor" :cell="cell" :options="requestConfig" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -111,15 +111,16 @@
 <script>
 import mixins from '../mixins/spider-mixins.js'
 import TableAndModal from '../components/tableAndModal.vue'
+import SpiderSelect from '../components/spiderSelect.vue'
 import data from './root-data.json'
 import CodeEditor from '@/components/code-editor'
 
 export default {
-  name: 'SStart',
   mixins: [mixins],
   components: {
     TableAndModal,
-    CodeEditor
+    CodeEditor,
+    SpiderSelect
   },
   props: {
     editor: Object,
@@ -224,31 +225,6 @@ export default {
   watch: {
     bodyTypeValue(newVal, oldVal) {
       this.setCellValue('body-type', newVal)
-    }
-  },
-  methods: {
-    // 处理请求设置选中的值和初始化值
-    requestConfigValueHandle(selectValues) {
-      let arrs = []
-      if (selectValues === undefined) {
-        this.requestConfig.forEach(element => {
-          if (this.getCellValue(element.value, element.defaultVal) === '1') {
-            arrs.push(element.value)
-            this.setCellValue(element.value, '1')
-          } else {
-            this.setCellValue(element.value, '0')
-          }
-        })
-      } else if (selectValues.length > 0) {
-        this.requestConfig.forEach(element => {
-          if (selectValues.indexOf(element.value) === -1) {
-            this.setCellValue(element.value, '0')
-          } else {
-            this.setCellValue(element.value, '1')
-          }
-        })
-      }
-      return arrs
     }
   },
   mounted() {
