@@ -7,9 +7,14 @@ export const listRequest = (params, succFun, errFun) => {
 }
 // 启动/停止定时
 export const startStopRequest = (isStart, id, succFun, errFun) => {
-  request.send(suffix + (isStart ? 'start' : 'stop'), {
-    id
-  }, succFun, errFun)
+  request.send(
+    suffix + (isStart ? 'start' : 'stop'),
+    {
+      id
+    },
+    succFun,
+    errFun
+  )
 }
 // 修改cron表达式
 export const cronRequest = (params, succFun, errFun) => {
@@ -17,17 +22,38 @@ export const cronRequest = (params, succFun, errFun) => {
 }
 // 删除爬虫
 export const removeRequest = (id, succFun, errFun) => {
-  request.send(suffix + 'remove', {
-    id
-  }, succFun, errFun)
+  request.send(
+    suffix + 'remove',
+    {
+      id
+    },
+    succFun,
+    errFun
+  )
 }
 // 手动运行爬虫
 export const runRequest = (id, succFun, errFun) => {
-  request.send(suffix + 'run', {
-    id
-  }, succFun, errFun)
+  request.send(
+    suffix + 'run',
+    {
+      id
+    },
+    succFun,
+    errFun
+  )
 }
 // 下载日志文件
 export const logDownloadRequest = (logId, taskId) => {
-  window.open('spider/log/download?id=' + logId + '&taskId=' + (taskId || ''))
+  window.open(suffix + 'log/download?id=' + logId + '&taskId=' + (taskId || ''))
+}
+// 查询除id外的其它流程
+export const otherRequest = (id, succFun, errFun) => {
+  request.send(
+    suffix + 'other',
+    {
+      id
+    },
+    succFun,
+    errFun
+  )
 }
