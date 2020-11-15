@@ -30,7 +30,7 @@
           </a-col>
           <a-col :span="6">
             <a-form-item label="其它">
-              <spider-select :editor="editor" :cell="cell" :options="selectConfig" @change="val => (outputSelectValue = val)" />
+              <spider-select :editor="editor" :cell="cell" :options="selectConfig" />
             </a-form-item>
           </a-col>
           <a-col :span="24">

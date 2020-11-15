@@ -1,26 +1,26 @@
 /* eslint-disable */
-var mxgraph = require('mxgraph')({
-  mxImageBasePath: './src/images',
-  mxBasePath: './src'
-})
+// var mxgraph = require('mxgraph')({
+//   mxImageBasePath: './src/images',
+//   mxBasePath: './src'
+// })
 
-var mxEvent = mxgraph.mxEvent
-var mxClient = mxgraph.mxClient
-var mxGraphHandler = mxgraph.mxGraphHandler
-var mxEditor = mxgraph.mxEditor
-var mxConstants = mxgraph.mxConstants
-var mxUtils = mxgraph.mxUtils
-var mxCodec = mxgraph.mxCodec
-var mxKeyHandler = mxgraph.mxKeyHandler
-var mxPerimeter = mxgraph.mxPerimeter
-var mxObjectCodec = mxgraph.mxObjectCodec
-var mxCodecRegistry = mxgraph.mxCodecRegistry
+// var mxEvent = mxgraph.mxEvent
+// var mxClient = mxgraph.mxClient
+// var mxGraphHandler = mxgraph.mxGraphHandler
+// var mxEditor = mxgraph.mxEditor
+// var mxConstants = mxgraph.mxConstants
+// var mxUtils = mxgraph.mxUtils
+// var mxCodec = mxgraph.mxCodec
+// var mxKeyHandler = mxgraph.mxKeyHandler
+// var mxPerimeter = mxgraph.mxPerimeter
+// var mxObjectCodec = mxgraph.mxObjectCodec
+// var mxCodecRegistry = mxgraph.mxCodecRegistry
 
 export function JsonProperty(object) {
   this.object = object || {}
 }
-JsonProperty.prototype.setDefaultValue = function(key,value){
-  this.object[key] = this.object[key] || value;
+JsonProperty.prototype.setDefaultValue = function(key, value) {
+  this.object[key] = this.object[key] || value
 }
 JsonProperty.prototype.reset = function(object) {
   this.object = object
@@ -33,10 +33,11 @@ JsonProperty.prototype.set = function(key, value) {
 JsonProperty.prototype.get = function(key) {
   return this.object[key]
 }
+window.JsonProperty = JsonProperty
 
 export function SpiderEditor(options) {
   options = options || {}
-  var emptyFunction = function() { }
+  var emptyFunction = function() {}
   this.selectedCellListener = options.selectedCellListener || emptyFunction
   if (mxClient.isBrowserSupported()) {
     this.editor = new mxEditor()
@@ -76,7 +77,7 @@ export function SpiderEditor(options) {
     this.keyHandler = new mxKeyHandler(this.graph)
     this.keyHandler.getFunction = function(evt) {
       if (evt != null) {
-        return (mxEvent.isControlDown(evt) || (mxClient.IS_MAC && evt.metaKey)) ? this.controlKeys[evt.keyCode] : this.normalKeys[evt.keyCode]
+        return mxEvent.isControlDown(evt) || (mxClient.IS_MAC && evt.metaKey) ? this.controlKeys[evt.keyCode] : this.normalKeys[evt.keyCode]
       }
       return null
     }
@@ -90,22 +91,28 @@ export function SpiderEditor(options) {
 
 SpiderEditor.prototype.bindKeyAction = function() {
   var _this = this
-  this.keyHandler.bindKey(46, function() {	// 按 Delete
+  this.keyHandler.bindKey(46, function() {
+    // 按 Delete
     _this.deleteSelectCells()
   })
-  this.keyHandler.bindControlKey(90, function() {	// Ctrl+Z
+  this.keyHandler.bindControlKey(90, function() {
+    // Ctrl+Z
     _this.execute('undo')
   })
-  this.keyHandler.bindControlKey(89, function() {	// Ctrl+Y
+  this.keyHandler.bindControlKey(89, function() {
+    // Ctrl+Y
     _this.execute('redo')
   })
-  this.keyHandler.bindControlKey(88, function() { // Ctrl+X
+  this.keyHandler.bindControlKey(88, function() {
+    // Ctrl+X
     _this.execute('cut')
   })
-  this.keyHandler.bindControlKey(67, function() {	// Ctrl+C
+  this.keyHandler.bindControlKey(67, function() {
+    // Ctrl+C
     _this.executeCopy()
   })
-  this.keyHandler.bindControlKey(65, function() {	// Ctrl+A
+  this.keyHandler.bindControlKey(65, function() {
+    // Ctrl+A
     // editor.execute('selectAll')
     _this.execute('selectAll')
   })
@@ -130,21 +137,19 @@ SpiderEditor.prototype.deleteSelectCells = function() {
     var cells = []
     for (var i = 0, len = selectCells.length; i < len; i++) {
       var cell = selectCells[i]
-      if ((!cell.isVertex()) || (cell.data && cell.data.get('shape') != 'start')) {
+      if (!cell.isVertex() || (cell.data && cell.data.get('shape') != 'start')) {
         cells.push(cell)
       }
     }
     if (cells.length === 0) {
       return
     }
-    var parents = (this.graph.selectParentAfterDelete) ? this.graph.model.getParents(cells) : null
+    var parents = this.graph.selectParentAfterDelete ? this.graph.model.getParents(cells) : null
     this.graph.removeCells(cells, true)
     if (parents != null) {
       var select = []
       for (let i = 0; i < parents.length; i++) {
-        if (this.graph.model.contains(parents[i]) &&
-            (this.graph.model.isVertex(parents[i]) ||
-                this.graph.model.isEdge(parents[i]))) {
+        if (this.graph.model.contains(parents[i]) && (this.graph.model.isVertex(parents[i]) || this.graph.model.isEdge(parents[i]))) {
           select.push(parents[i])
         }
       }
@@ -251,7 +256,7 @@ SpiderEditor.prototype.execute = function(action) {
 }
 
 SpiderEditor.prototype.getSelectedCell = function() {
-  var cell = this.graph.getSelectionCell() || this.graph.getModel().getRoot();
+  var cell = this.graph.getSelectionCell() || this.graph.getModel().getRoot()
   cell.data = cell.data || new JsonProperty()
   return cell
 }
@@ -265,7 +270,7 @@ SpiderEditor.prototype.selectCell = function(cell) {
 }
 
 SpiderEditor.prototype.valid = function() {
-  var cells = editor.graph.getModel().cells
+  var cells = this.editor.graph.getModel().cells
   for (var key in cells) {
     var cell = cells[key]
     if (cell && cell.edge) {

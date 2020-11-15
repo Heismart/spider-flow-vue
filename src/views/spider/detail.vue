@@ -1,9 +1,9 @@
 <template>
-  <a-layout class="spider-detail-container">
+  <a-layout class="spider-detail-container" ref="spiderDetail">
     <a-layout-header>
       <template v-for="(item, index) in headerBtns">
         <a-tooltip :key="'header-icon-' + index" :title="item.title" placement="bottom" v-if="item.type === 'ant'">
-          <a-icon :type="item.icon"></a-icon>
+          <a-icon :type="item.icon" @click="headerBtnItemHandle(item.click)"></a-icon>
         </a-tooltip>
         <a-divider :key="'header-icon-' + index" type="vertical" v-else-if="item.type === 'divider'" />
       </template>
@@ -26,12 +26,13 @@
 import HeaderBtnsJson from './json/header-btns.json'
 import { SpiderEditor, JsonProperty } from '@/libs/spidereditor/spider-editor'
 import { loadShapes } from '@/libs/spidereditor/editor'
+import { xmlRequest, saveRequest } from '@/api/spider.js'
 
 export default {
   data() {
     return {
       queryParam: {
-        flowId: ''
+        id: ''
       },
       headerBtns: HeaderBtnsJson,
       editor: null,
@@ -44,9 +45,9 @@ export default {
   computed: {
     currentTemplate() {
       var template = ''
-      if (this.selectCell.edge === 1) {
+      if (this.selectCell.edge === true || this.selectCell.edge === 1) {
         template = 'edge'
-      } else if (this.selectCell.data && this.selectCell.data.get('shape') === undefined) {
+      } else if (this.selectCell.data && (this.selectCell.data.get === undefined || this.selectCell.data.get('shape') === undefined)) {
         template = 'root'
       } else {
         template = this.selectCell.data.get('shape') || 'root'
@@ -66,25 +67,23 @@ export default {
   methods: {
     // 绑定键盘事件
     bindKeyEvent() {
-      // 影响了其它输入框的输入，需要改变实现
-      // window.onkeydown = e => {
-      //   let key = e.key
-      //   let exclude = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12']
-      //   if (exclude.indexOf(key) === -1) {
-      //     e.preventDefault()
-      //   }
-      //   this.headerBtns.forEach(element => {
-      //     if (element.exeFunKey && element.exeFunKey.length > 0) {
-      //       if (
-      //         (element.exeFunKey.indexOf('ctrl') !== -1 && e.ctrlKey === true && element.exeFunKey.indexOf(key.toLowerCase()) !== -1) ||
-      //         (element.exeFunKey.indexOf('alt') !== -1 && e.altKey === true && element.exeFunKey.indexOf(key.toLowerCase()) !== -1) ||
-      //         element.exeFunKey.indexOf(key.toLowerCase()) !== -1
-      //       ) {
-      //         console.log(element.title)
-      //       }
-      //     }
-      //   })
-      // }
+      window.onkeydown = e => {
+        let key = e.key
+        this.headerBtns.forEach(element => {
+          if (element.exeFunKey && element.exeFunKey.length > 0) {
+            if (
+              (element.exeFunKey.indexOf('ctrl') !== -1 && e.ctrlKey === true && element.exeFunKey.indexOf(key.toLowerCase()) !== -1) ||
+              (element.exeFunKey.indexOf('alt') !== -1 && e.altKey === true && element.exeFunKey.indexOf(key.toLowerCase()) !== -1) ||
+              (element.exeFunKey.length === 1 && element.exeFunKey.indexOf(key.toLowerCase()) !== -1)
+            ) {
+              // 这里需要执行点什么方法
+              this.headerBtnItemHandle(element.click)
+              // 阻止其它事件
+              e.preventDefault()
+            }
+          }
+        })
+      }
     },
     // 选择cell触发的方法
     onSelectedCell(cell) {
@@ -102,14 +101,91 @@ export default {
       // 加载图形
       loadShapes(editor, this.$refs.spiderToolbarContainer)
       this.editor = editor
+    },
+    // 头部按钮事件处理
+    headerBtnItemHandle(item) {
+      this.headerBtnHandle(item.name, item.params)
+    },
+    // 头部按钮事件处理
+    headerBtnHandle(methodName, params) {
+      if (methodName && this[methodName] && typeof this[methodName] === 'function') {
+        this[methodName](params)
+      }
+    },
+    // 跳转页面
+    goPage(url) {
+      this.$router.push(url)
+    },
+    // 获取当前流程的xml
+    xmlAction() {
+      if (this.queryParam.id) {
+        xmlRequest(this.queryParam.id, data => {
+          this.editor.setXML(data)
+        })
+      } else {
+        this.editor.onSelectedCell()
+      }
+    },
+    // 保存流程内容
+    saveAction() {
+      this.validXML(() => {
+        let params = this.queryParam
+        params.xml = this.editor.getXML()
+        params.name = this.editor.graph
+          .getModel()
+          .getRoot()
+          .data.get('spiderName')
+        saveRequest(params, data => {
+          if (this.queryParam.id !== data) {
+            this.queryParam.id = data
+            this.$router.push('/spider_detail/' + data)
+          }
+          this.$message.success('保存成功')
+        })
+      })
+    },
+    // 验证流程的正确性
+    validXML(callback) {
+      var cell = this.editor.valid()
+      if (cell) {
+        this.$confirm({
+          title: '异常处理',
+          content: h => <div style="color:red;">检测到有箭头未连接到节点上，是否处理？</div>,
+          okText: '处理',
+          cancelText: '忽略',
+          onOk: () => {
+            this.editor.selectCell(cell)
+          },
+          onCancel: () => {
+            callback && callback()
+          },
+          class: 'test'
+        })
+      } else {
+        callback && callback()
+      }
+    },
+    // 流程图执行操作
+    spiderFlowExecute(exe) {
+      this.editor.execute(exe)
+    },
+    // 删除选中节点
+    deleteSelectCells() {
+      this.editor.deleteSelectCells()
+    },
+    // 打印当前的xml到console
+    printXmlToConsole() {
+      console.log(this.editor.getXML())
     }
   },
   mounted() {
-    this.queryParam.flowId = this.$route.params.flowId
+    this.queryParam.id = this.$route.params.flowId
     // 渲染面板
     this.renderSpiderEditor()
     // 绑定键盘事件
     this.bindKeyEvent()
+    // 加载xml
+    this.xmlAction()
   },
   destroyed() {
     window.onkeydown = null

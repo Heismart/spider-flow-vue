@@ -57,3 +57,20 @@ export const otherRequest = (id, succFun, errFun) => {
     errFun
   )
 }
+// 获取流程的xml
+export const xmlRequest = (id, succFun, errFun) => {
+  request.send(
+    suffix + 'xml',
+    {
+      id
+    },
+    succFun,
+    errFun,
+    { responseType: 'text' }
+  )
+}
+// 保存流程内容
+export const saveRequest = (params, succFun, errFun) => {
+  params.name = params.name || '未定义名称'
+  request.send(suffix + 'save', params, succFun, errFun, { responseType: 'text' })
+}

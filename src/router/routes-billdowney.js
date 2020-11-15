@@ -13,159 +13,193 @@
  *  login: (0) 设为1后该页面需要登录才能访问
  * }
  */
-export default [{
-  path: '/_home',
-  name: '_home',
-  component: () => import('@/components/main'),
-  meta: {
-    title: '_首页',
-    icon: 'home',
-    hideInBread: 1,
-    hideInMenu: 1
-  },
-  children: [{
-    path: '/home',
-    name: 'home',
-    component: () => import('@/views/home/home.vue'),
+export default [
+  {
+    path: '/_home',
+    name: '_home',
+    component: () => import('@/components/main'),
     meta: {
-      title: '首页',
+      title: '_首页',
       icon: 'home',
       hideInBread: 1,
-      login: 1
-    }
-  }]
-}, {
-  path: '/user_login',
-  name: 'user_login',
-  component: () => import('@/views/user/user-login.vue'),
-  meta: {
-    title: '用户登录',
-    hideInBread: 1,
-    hideInMenu: 1
-  }
-}, {
-  path: '/_spider_list',
-  name: '_spider_list',
-  component: () => import('@/components/main'),
-  meta: {
-    title: '_爬虫列表',
-    icon: 'container',
-    hideInBread: 1
+      hideInMenu: 1
+    },
+    children: [
+      {
+        path: '/home',
+        name: 'home',
+        component: () => import('@/views/home/home.vue'),
+        meta: {
+          title: '首页',
+          icon: 'home',
+          hideInBread: 1,
+          login: 1
+        }
+      }
+    ]
   },
-  children: [{
-    path: '/spider_list',
-    name: 'spider_list',
-    component: () => import('@/views/spider/list.vue'),
+  {
+    path: '/user_login',
+    name: 'user_login',
+    component: () => import('@/views/user/user-login.vue'),
     meta: {
-      title: '爬虫列表',
-      icon: 'container',
-      login: 1
-    }
-  }, {
-    path: '/spider_detail/:flowId',
-    name: 'spider_detail',
-    component: () => import('@/views/spider/detail.vue'),
-    meta: {
-      title: '爬虫详情',
-      icon: 'container',
-      login: 1,
+      title: '用户登录',
+      hideInBread: 1,
       hideInMenu: 1
     }
-  }, {
-    path: '/task_list/:flowId',
-    name: 'task_list',
-    component: () => import('@/views/spider/taskList.vue'),
-    meta: {
-      title: '任务详情',
-      icon: 'container',
-      login: 1,
-      hideInMenu: 1
-    }
-  }]
-}, {
-  path: '/_variables_list',
-  name: '_variables_list',
-  component: () => import('@/components/main'),
-  meta: {
-    title: '_全局变量',
-    icon: 'tablet',
-    hideInBread: 1
   },
-  children: [{
-    path: '/variables_list',
-    name: 'variables_list',
-    component: () => import('@/views/variables/list.vue'),
+  {
+    path: '/_spider_list',
+    name: '_spider_list',
+    component: () => import('@/components/main'),
     meta: {
-      title: '全局变量',
+      title: '_爬虫列表',
+      icon: 'container',
+      hideInBread: 1
+    },
+    children: [
+      {
+        path: '/spider_list',
+        name: 'spider_list',
+        component: () => import('@/views/spider/list.vue'),
+        meta: {
+          title: '爬虫列表',
+          icon: 'container',
+          login: 1
+        }
+      },
+      {
+        path: '/spider_detail/:flowId',
+        name: 'spider_detail',
+        component: () => import('@/views/spider/detail.vue'),
+        meta: {
+          title: '爬虫详情-编辑',
+          icon: 'container',
+          login: 1,
+          hideInMenu: 1
+        }
+      },
+      {
+        path: '/spider_detail',
+        name: 'spider_detail',
+        component: () => import('@/views/spider/detail.vue'),
+        meta: {
+          title: '爬虫详情-新增',
+          icon: 'container',
+          login: 1,
+          hideInMenu: 1
+        }
+      },
+      {
+        path: '/task_list/:flowId',
+        name: 'task_list',
+        component: () => import('@/views/spider/taskList.vue'),
+        meta: {
+          title: '任务详情',
+          icon: 'container',
+          login: 1,
+          hideInMenu: 1
+        }
+      }
+    ]
+  },
+  {
+    path: '/_variables_list',
+    name: '_variables_list',
+    component: () => import('@/components/main'),
+    meta: {
+      title: '_全局变量',
       icon: 'tablet',
-      login: 1
-    }
-  }]
-}, {
-  path: '/_functions_list',
-  name: '_functions_list',
-  component: () => import('@/components/main'),
-  meta: {
-    title: '_自定义函数',
-    icon: 'play-square',
-    hideInBread: 1
+      hideInBread: 1
+    },
+    children: [
+      {
+        path: '/variables_list',
+        name: 'variables_list',
+        component: () => import('@/views/variables/list.vue'),
+        meta: {
+          title: '全局变量',
+          icon: 'tablet',
+          login: 1
+        }
+      }
+    ]
   },
-  children: [{
-    path: '/functions_list',
-    name: 'functions_list',
-    component: () => import('@/views/functions/list.vue'),
+  {
+    path: '/_functions_list',
+    name: '_functions_list',
+    component: () => import('@/components/main'),
     meta: {
-      title: '自定义函数',
+      title: '_自定义函数',
       icon: 'play-square',
-      login: 1
-    }
-  }, {
-    path: '/functions_detail/:id',
-    name: 'functions_detail',
-    component: () => import('@/views/functions/detail.vue'),
-    meta: {
-      title: '自定义函数详情页',
-      login: 1,
-      icon: 'database',
-      hideInMenu: 1
-    }
-  }]
-}, {
-  path: '/_datasources_list',
-  name: '_datasources_list',
-  component: () => import('@/components/main'),
-  meta: {
-    title: '_数据源管理',
-    icon: 'database',
-    hideInBread: 1
+      hideInBread: 1
+    },
+    children: [
+      {
+        path: '/functions_list',
+        name: 'functions_list',
+        component: () => import('@/views/functions/list.vue'),
+        meta: {
+          title: '自定义函数',
+          icon: 'play-square',
+          login: 1
+        }
+      },
+      {
+        path: '/functions_detail/:id',
+        name: 'functions_detail',
+        component: () => import('@/views/functions/detail.vue'),
+        meta: {
+          title: '自定义函数详情页',
+          login: 1,
+          icon: 'database',
+          hideInMenu: 1
+        }
+      }
+    ]
   },
-  children: [{
-    path: '/datasources_list',
-    name: 'datasources_list',
-    component: () => import('@/views/datasources/list.vue'),
+  {
+    path: '/_datasources_list',
+    name: '_datasources_list',
+    component: () => import('@/components/main'),
     meta: {
-      title: '数据源管理',
+      title: '_数据源管理',
       icon: 'database',
-      login: 1
-    }
-  }]
-}, {
-  path: '/_scripts',
-  name: '_scripts',
-  component: () => import('@/components/main'),
-  meta: {
-    title: '_脚本管理',
-    icon: 'laptop',
-    hideInBread: 1
+      hideInBread: 1
+    },
+    children: [
+      {
+        path: '/datasources_list',
+        name: 'datasources_list',
+        component: () => import('@/views/datasources/list.vue'),
+        meta: {
+          title: '数据源管理',
+          icon: 'database',
+          login: 1
+        }
+      }
+    ]
   },
-  children: [{
-    path: '/scripts',
-    name: 'scripts',
-    component: () => import('@/views/scripts/index.vue'),
+  {
+    path: '/_scripts',
+    name: '_scripts',
+    component: () => import('@/components/main'),
     meta: {
-      title: '脚本管理',
+      title: '_脚本管理',
       icon: 'laptop',
-      login: 1
-    }
-  }]
-}]
+      hideInBread: 1
+    },
+    children: [
+      {
+        path: '/scripts',
+        name: 'scripts',
+        component: () => import('@/views/scripts/index.vue'),
+        meta: {
+          title: '脚本管理',
+          icon: 'laptop',
+          login: 1
+        }
+      }
+    ]
+  }
+]

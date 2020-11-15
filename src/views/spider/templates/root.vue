@@ -6,7 +6,7 @@
           <a-row>
             <a-col :span="formItemLayout.colSpan">
               <a-form-item label="爬虫名称">
-                <a-input placeholder="请输入爬虫名称" :size="size" :defaultValue="getCellValue('spiderName')" @change="e => setCellValue('spiderName', e)" />
+                <a-input placeholder="请输入爬虫名称" :size="size" :defaultValue="getCellValue('spiderName', '未定义名称')" @change="e => setCellValue('spiderName', e)" />
               </a-form-item>
             </a-col>
             <a-col :span="formItemLayout.colSpan">
@@ -60,9 +60,6 @@ export default {
   },
   data() {
     return data
-  },
-  mounted() {
-    console.log(this.cell)
   }
 }
 </script>

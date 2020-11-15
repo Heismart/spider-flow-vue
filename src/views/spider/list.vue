@@ -7,37 +7,23 @@
         </a-form-item>
         <a-form-item>
           <a-button @click="listAction(1)" icon="search" type="primary">查询</a-button>
-          <a-button @click="openDetail(0)" icon="plus" type="primary">添加函数</a-button>
+          <a-button @click="goSpiderDetailPage('')" icon="plus" type="primary">添加爬虫</a-button>
         </a-form-item>
       </a-form>
     </div>
-    <a-table
-      :columns="columns"
-      :data-source="data.records"
-      :pagination="pagination"
-      @change="handleChange"
-      rowKey="id"
-    >
-      <template slot="name" slot-scope="val,row">
-        <a @click="goSpiderDetailPage(row.id)">{{val}}</a>
+    <a-table :columns="columns" :data-source="data.records" :pagination="pagination" @change="handleChange" rowKey="id">
+      <template slot="name" slot-scope="val, row">
+        <a @click="goSpiderDetailPage(row.id)">{{ val }}</a>
       </template>
-      <template slot="cron" slot-scope="val,row">
-        <a @click="openCronModal(val,row)">{{val?val:'编辑cron'}}</a>
+      <template slot="cron" slot-scope="val, row">
+        <a @click="openCronModal(val, row)">{{ val ? val : '编辑cron' }}</a>
       </template>
-      <template slot="enabled" slot-scope="val,row">
-        <span v-show="false">{{$set(row,'cronChecked',val === '1')}}</span>
-        <a-switch
-          :loading="row.loading"
-          @change="checked => handleSwitch(checked,row)"
-          checked-children="定时"
-          un-checked-children="长任务"
-          v-model="row.cronChecked"
-        />
+      <template slot="enabled" slot-scope="val, row">
+        <span v-show="false">{{ $set(row, 'cronChecked', val === '1') }}</span>
+        <a-switch :loading="row.loading" @change="checked => handleSwitch(checked, row)" checked-children="定时" un-checked-children="长任务" v-model="row.cronChecked" />
       </template>
-      <template slot="runFinish" slot-scope="val,record">
-        <a
-          @click="goTaskListPage(record.id)"
-        >{{record.running}}/{{record.executeCount?record.executeCount:0}}</a>
+      <template slot="runFinish" slot-scope="val, record">
+        <a @click="goTaskListPage(record.id)">{{ record.running }}/{{ record.executeCount ? record.executeCount : 0 }}</a>
       </template>
       <template slot="operation" slot-scope="val">
         <a-tooltip placement="top" title="通知设置">
@@ -47,13 +33,7 @@
         </a-tooltip>
         <a-divider type="vertical" />
         <a-tooltip placement="top" title="手动运行">
-          <a-popconfirm
-            @confirm="runAction(val)"
-            cancel-text="取消"
-            ok-text="确定"
-            placement="topRight"
-            title="您确定要手动运行一次该爬虫吗？"
-          >
+          <a-popconfirm @confirm="runAction(val)" cancel-text="取消" ok-text="确定" placement="topRight" title="您确定要手动运行一次该爬虫吗？">
             <a>
               <a-icon type="play-circle" />
             </a>
@@ -66,13 +46,7 @@
           </a>
         </a-tooltip>
         <a-divider type="vertical" />
-        <a-popconfirm
-          @confirm="removeAction(val)"
-          cancel-text="取消"
-          ok-text="确定"
-          placement="topRight"
-          title="您确定要删除此爬虫吗？"
-        >
+        <a-popconfirm @confirm="removeAction(val)" cancel-text="取消" ok-text="确定" placement="topRight" title="您确定要删除此爬虫吗？">
           <a-tooltip placement="top" title="删除">
             <a>
               <a-icon type="delete" />
@@ -87,14 +61,7 @@
 </template>
 
 <script>
-import {
-  listRequest,
-  startStopRequest,
-  cronRequest,
-  removeRequest,
-  runRequest,
-  logDownloadRequest
-} from '@/api/spider.js'
+import { listRequest, startStopRequest, cronRequest, removeRequest, runRequest, logDownloadRequest } from '@/api/spider.js'
 import CronModal from '@/components/CronModal.vue'
 import NoticeModel from './noticeModal.vue'
 
@@ -217,15 +184,11 @@ export default {
           checked,
           row.id,
           data => {
-            that.$message.success(
-              (checked ? '切换为定时任务' : '切换为长任务') + '成功'
-            )
+            that.$message.success((checked ? '切换为定时任务' : '切换为长任务') + '成功')
             this.listAction(this.queryParam.page)
           },
           data => {
-            that.$message.error(
-              (checked ? '切换为定时任务' : '切换为长任务') + '失败'
-            )
+            that.$message.error((checked ? '切换为定时任务' : '切换为长任务') + '失败')
             that.$set(row, 'loading', false)
             this.listAction(this.queryParam.page)
           }

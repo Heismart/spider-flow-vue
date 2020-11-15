@@ -20,6 +20,7 @@ let mixins = {
       if (value || !defaultVal) {
         return value
       } else {
+        this.cell.data.set(key, defaultVal)
         return defaultVal
       }
     },

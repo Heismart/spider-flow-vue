@@ -12,7 +12,6 @@ import './assets/less/index.less'
  */
 Vue.config.productionTip = false
 Vue.use(Antd)
-
 /**
  * @description 全局注册应用配置
  */
