@@ -1,5 +1,5 @@
 <template>
-  <div class="editor-container" ref="container" :style="{width:width, height:height}"></div>
+  <div class="editor-container" ref="container" :style="{ width: width, height: height }"></div>
 </template>
 
 <script>
@@ -9,7 +9,12 @@ import 'monaco-editor/esm/vs/editor/contrib/find/findController.js'
 export default {
   name: 'CodeEditor',
   props: {
-    value: String,
+    value: {
+      type: String,
+      default() {
+        return ''
+      }
+    },
     option: {
       type: Object,
       default() {
@@ -41,7 +46,7 @@ export default {
   },
   watch: {
     option: {
-      handler: function (val, oldVal) {
+      handler: function(val, oldVal) {
         Object(this.editorPption, this.option)
         this.init()
       },
@@ -53,14 +58,14 @@ export default {
     // 初始化实例
     init() {
       if (this.$refs.container) {
-        if (this.editor) {
+        if (!this.editor) {
           // 销毁实例
-          this.editor.dispose()
+          // this.editor.dispose()
+          this.editor = monaco.editor.create(this.$refs.container, {
+            value: this.value,
+            ...this.editorPption
+          })
         }
-        this.editor = monaco.editor.create(this.$refs.container, {
-          value: this.value,
-          ...this.editorPption
-        })
         this.setEvent()
       }
     },

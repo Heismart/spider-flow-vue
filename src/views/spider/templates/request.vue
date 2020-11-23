@@ -100,7 +100,7 @@
           </a-select>
         </a-form-item>
         <a-form-item label="内容" v-if="bodyTypeValue === 'raw'">
-          <code-editor ref="editor" height="100px" :value="getCellValue('request-body')" @change="val => setCellValue('request-body', val)"></code-editor>
+          <code-editor height="100px" :value="getCellValue('request-body')" @change="val => setCellValue('request-body', val)"></code-editor>
         </a-form-item>
         <table-and-modal v-if="bodyTypeValue === 'form-data'" :batchAddBtn="false" :editor="editor" :cell="cell" :config="bodyParameterConfig"></table-and-modal>
       </a-form>

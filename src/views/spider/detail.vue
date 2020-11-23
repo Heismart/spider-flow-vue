@@ -7,13 +7,19 @@
         </a-tooltip>
         <a-divider :key="'header-icon-' + index" type="vertical" v-else-if="item.type === 'divider'" />
       </template>
+      <!-- 测试窗口 -->
+      <test-modal :editor="editor" :cell="selectCell" />
+      <!-- 历史版本弹窗 -->
+      <history-version-modal :id="queryParam.id" :editor="editor" ref="historyVersionModal" />
     </a-layout-header>
     <a-layout>
       <a-layout-sider width="100px">
         <div class="spider-toolbar-container" ref="spiderToolbarContainer"></div>
       </a-layout-sider>
       <a-layout-content class="spider-content">
-        <div class="spider-editor-container" ref="spiderEditorContainer"></div>
+        <div class="spider-editor-container" ref="spiderEditorContainer" v-show="showXMLPage !== true"></div>
+        <!-- xml编辑器 -->
+        <code-editor v-show="showXMLPage === true" height="100%" ref="xmlEditor" :option="{ language: 'xml' }" @change="val => editor.setXML(val)"></code-editor>
       </a-layout-content>
     </a-layout>
     <a-layout-footer class="spider-properties-container">
@@ -27,8 +33,16 @@ import HeaderBtnsJson from './json/header-btns.json'
 import { SpiderEditor, JsonProperty } from '@/libs/spidereditor/spider-editor'
 import { loadShapes } from '@/libs/spidereditor/editor'
 import { xmlRequest, saveRequest } from '@/api/spider.js'
+import HistoryVersionModal from './historyVersionModal.vue'
+import CodeEditor from '@/components/code-editor'
+import TestModal from './testModal.vue'
 
 export default {
+  components: {
+    HistoryVersionModal,
+    CodeEditor,
+    TestModal
+  },
   data() {
     return {
       queryParam: {
@@ -39,7 +53,8 @@ export default {
       selectCell: {
         id: '',
         data: new JsonProperty()
-      }
+      },
+      showXMLPage: false
     }
   },
   computed: {
@@ -158,8 +173,7 @@ export default {
           },
           onCancel: () => {
             callback && callback()
-          },
-          class: 'test'
+          }
         })
       } else {
         callback && callback()
@@ -176,6 +190,15 @@ export default {
     // 打印当前的xml到console
     printXmlToConsole() {
       console.log(this.editor.getXML())
+    },
+    // 获取版本历史记录，并展示弹窗
+    getHistoryVersion() {
+      this.$refs.historyVersionModal.historyAction()
+    },
+    // 展示xml页面
+    showXMLPageHandle() {
+      this.$refs.xmlEditor.setValue(this.editor.getXML())
+      this.showXMLPage = !this.showXMLPage
     }
   },
   mounted() {

@@ -81,7 +81,7 @@ export default [
       },
       {
         path: '/spider_detail',
-        name: 'spider_detail',
+        name: 'spider_detail_add',
         component: () => import('@/views/spider/detail.vue'),
         meta: {
           title: '爬虫详情-新增',

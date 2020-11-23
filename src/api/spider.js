@@ -74,3 +74,26 @@ export const saveRequest = (params, succFun, errFun) => {
   params.name = params.name || '未定义名称'
   request.send(suffix + 'save', params, succFun, errFun, { responseType: 'text' })
 }
+// 查询id的历史记录
+export const historyRequest = (id, succFun, errFun) => {
+  request.send(
+    suffix + 'history',
+    {
+      id
+    },
+    succFun,
+    errFun
+  )
+}
+// 根据id和时间戳来恢复历史记录
+export const recoverHistoryRequest = (id, timestamp, succFun, errFun) => {
+  request.send(
+    suffix + 'history',
+    {
+      id,
+      timestamp
+    },
+    succFun,
+    errFun
+  )
+}

@@ -5,24 +5,12 @@
         <a-layout-header>
           <a-select :default-value="scrpitSelect" @change="scrpitHandleChange" style="width: 100%">
             <a-select-option value>请选择</a-select-option>
-            <a-select-option
-              :key="scrpitSelect + item"
-              :value="item"
-              v-for="item in scrpitFolder"
-            >{{item}}</a-select-option>
+            <a-select-option :key="scrpitSelect + item" :value="item" v-for="item in scrpitFolder">{{ item }}</a-select-option>
           </a-select>
         </a-layout-header>
         <a-layout-content>
           <a-dropdown :trigger="['contextmenu']">
-            <a-tree
-              :expandedKeys="expandedKeys"
-              :selectedKeys="selectedKeys"
-              :treeData="treeData"
-              @expand="onTreeExpand"
-              @select="onTreeSelect"
-              autoExpandParent
-              show-icon
-            >
+            <a-tree :expandedKeys="expandedKeys" :selectedKeys="selectedKeys" :treeData="treeData" @expand="onTreeExpand" @select="onTreeSelect" autoExpandParent show-icon>
               <a-icon slot="folder" type="folder" />
               <a-icon slot="file" type="file" />
             </a-tree>
@@ -33,19 +21,12 @@
         <a-layout-header class="btns-group">
           <a-form layout="inline">
             <a-form-item>
-              <a-button
-                @click="openModal('请输入脚本名称','','createAction')"
-                type="primary"
-                v-show="isSelectFile() === false"
-              >新建脚本</a-button>
+              <a-button @click="openModal('请输入脚本名称', '', 'createAction')" type="primary" v-show="isSelectFile() === false">新建脚本</a-button>
               <a-dropdown :trigger="['click']" v-show="isSelectFile()">
                 <a-menu @click="handleMenuClick" slot="overlay">
                   <a-menu-item key="newFile" v-show="currentFile.directory">新建文件</a-menu-item>
                   <a-menu-item key="newFolder" v-show="currentFile.directory">新建文件夹</a-menu-item>
-                  <a-menu-item
-                    key="rename"
-                    v-show="treeData.length > 0 && treeData[0].key !== selectedKeys[0]"
-                  >重命名</a-menu-item>
+                  <a-menu-item key="rename" v-show="treeData.length > 0 && treeData[0].key !== selectedKeys[0]">重命名</a-menu-item>
                   <a-menu-item key="delete">删除</a-menu-item>
                 </a-menu>
                 <a-button type="primary">
@@ -56,7 +37,7 @@
               <a-button @click="readAction" type="primary" v-show="currentFile.name">重载文件</a-button>
               <a-button @click="saveAction" type="primary" v-show="currentFile.name">保存当前文件</a-button>
             </a-form-item>
-            <a-form-item label="选中文件名">{{currentFile.name}}</a-form-item>
+            <a-form-item label="选中文件名">{{ currentFile.name }}</a-form-item>
             <a-form-item label="运行参数" v-show="currentFile.name">
               <a-input placeholder="请输入运行参数" v-model="currentFile.parameter"></a-input>
             </a-form-item>
@@ -66,39 +47,18 @@
           </a-form>
         </a-layout-header>
         <a-layout-content>
-          <code-editor
-            :option="editorOptions"
-            height="600px"
-            ref="editor"
-            v-model="currentFile.content"
-          ></code-editor>
+          <code-editor :option="editorOptions" height="600px" ref="editor" v-model="currentFile.content"></code-editor>
         </a-layout-content>
       </a-layout>
     </a-layout>
-    <a-modal
-      :title="modal.title"
-      @ok="handleModal"
-      cancel-text="取消"
-      ok-text="确认"
-      v-model="modal.show"
-    >
+    <a-modal :title="modal.title" @ok="handleModal" cancel-text="取消" ok-text="确认" v-model="modal.show">
       <a-input v-model="modal.value" />
     </a-modal>
   </a-card>
 </template>
 
 <script>
-import {
-  listRequest,
-  filesRequest,
-  removeFileRequest,
-  createRequest,
-  renameFileRequest,
-  createFileRequest,
-  readRequest,
-  saveRequest,
-  testRequest
-} from '@/api/scripts.js'
+import { listRequest, filesRequest, removeFileRequest, createRequest, renameFileRequest, createFileRequest, readRequest, saveRequest, testRequest } from '@/api/scripts.js'
 import CodeEditor from '@/components/code-editor'
 
 export default {
@@ -230,10 +190,7 @@ export default {
                 scriptName: that.scrpitSelect
               }
               if (flag) {
-                params.file = that.currentFile.path.replace(
-                  params.scriptName + '/',
-                  ''
-                )
+                params.file = that.currentFile.path.replace(params.scriptName + '/', '')
               }
               removeFileRequest(params, data => {
                 that.$message.success(data.message)
@@ -295,10 +252,7 @@ export default {
         scriptName: this.scrpitSelect,
         dir: this.modal.param
       }
-      params.file =
-        this.currentFile.path.replace(params.scriptName + '/', '') +
-        '/' +
-        this.modal.value
+      params.file = this.currentFile.path.replace(params.scriptName + '/', '') + '/' + this.modal.value
       createFileRequest(params, data => {
         this.$message.success(data.message)
         this.modal.show = false
@@ -311,10 +265,7 @@ export default {
       let params = {
         scriptName: this.scrpitSelect
       }
-      params.file =
-        this.currentFile.path.replace(params.scriptName + '/', '') +
-        '/' +
-        this.modal.value
+      params.file = this.currentFile.path.replace(params.scriptName + '/', '') + '/' + this.modal.value
       readRequest(params, data => {
         this.$refs.editor.setValue(data.data)
       })
@@ -325,10 +276,7 @@ export default {
         scriptName: this.scrpitSelect,
         content: this.currentFile.content
       }
-      params.file =
-        this.currentFile.path.replace(params.scriptName + '/', '') +
-        '/' +
-        this.modal.value
+      params.file = this.currentFile.path.replace(params.scriptName + '/', '') + '/' + this.modal.value
       saveRequest(params, data => {
         this.$message.success(data.message)
       })
@@ -339,10 +287,7 @@ export default {
         scriptName: this.scrpitSelect,
         parameter: this.currentFile.parameter
       }
-      params.file =
-        this.currentFile.path.replace(params.scriptName + '/', '') +
-        '/' +
-        this.modal.value
+      params.file = this.currentFile.path.replace(params.scriptName + '/', '') + '/' + this.modal.value
       testRequest(params, data => {
         data = data.data
         if (data.exitValue === 0) {
@@ -353,12 +298,7 @@ export default {
         } else if (data.exitValue === -2) {
           this.$message.error('不支持的脚本类型')
         } else {
-          var message =
-            (data.value || '') +
-            '\r\n' +
-            (data.error || '') +
-            '\r\n' +
-            (data.stack || '')
+          var message = (data.value || '') + '\r\n' + (data.error || '') + '\r\n' + (data.stack || '')
           message = message
             .replace(/\n/g, '<br>')
             .replace(/ /g, '&nbsp;')
